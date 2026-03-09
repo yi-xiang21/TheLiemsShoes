@@ -1,0 +1,87 @@
+.admin-layout {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  width: 100%;
+  background: linear-gradient(135deg, #f7f4ef 0%, #f2ebe0 100%);
+}
+
+.admin-sidebar {
+  background: #1f2a37;
+  color: #fff;
+  padding: 24px 16px;
+}
+
+.admin-brand {
+  margin: 0 0 20px;
+  font-size: 1.2rem;
+}
+
+.admin-nav {
+  display: grid;
+  gap: 8px;
+}
+
+.admin-nav-link {
+  text-decoration: none;
+  color: #d2dbe7;
+  padding: 10px 12px;
+  border-radius: 8px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.admin-nav-link:hover {
+  background-color: #2a394a;
+  color: #fff;
+}
+
+.admin-nav-link.active {
+  background-color: #31475f;
+  color: #fff;
+}
+
+.admin-content-wrapper {
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
+.admin-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid #d9d2c4;
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.admin-header h1 {
+  margin: 0;
+  color: #222;
+}
+
+.admin-header p {
+  margin: 4px 0 0;
+  color: #444;
+}
+
+.admin-main {
+  padding: 24px;
+}
+
+.admin-card {
+  background: #fff;
+  border: 1px solid #e4ddd0;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+@media (max-width: 768px) {
+  .admin-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-sidebar {
+    padding: 14px;
+  }
+
+  .admin-main {
+    padding: 16px;
+  }
+}
