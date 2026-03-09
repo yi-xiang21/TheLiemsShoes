@@ -72,6 +72,54 @@
   padding: 16px;
 }
 
+.button {
+  display: inline-block;
+  padding: 10px 16px;
+  background-color: #1f2a37;
+  margin: 5px;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.button:hover {
+  background-color: #fe4848;
+}
+
+.admin-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.admin-card-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.create-account-form
+{
+  display: grid;
+  gap: 16px;
+  max-width: 400px;
+}
+.form-group{
+  display: flex;
+  flex-direction: column;
+}
+.form-group label {
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+.form-group input,
+.form-group select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+
 @media (max-width: 768px) {
   .admin-layout {
     grid-template-columns: 1fr;

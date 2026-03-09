@@ -14,6 +14,9 @@ function AdminSidebar() {
         <NavLink to="/admin/orders" className="admin-nav-link">
           Orders
         </NavLink>
+        <NavLink to="/admin/account" className="admin-nav-link">
+          Account
+        </NavLink>
       </nav>
     </aside>
   );
