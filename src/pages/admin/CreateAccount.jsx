@@ -88,7 +88,7 @@ function CreateAccount() {
                 </select>
             </div>
             <button type="submit" className="button" disabled={isSubmitting}>
-              {isSubmitting ? "Dang tao..." : "Create Account"}
+              {isSubmitting ? "Đang tạo..." : "Create Account"}
             </button>
         </form>
     </div>
