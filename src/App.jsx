@@ -4,7 +4,7 @@ import AdminLayout from "./layout/admin"
 import Dashboard from "./pages/admin/Dashboard"
 import Products from "./pages/admin/Products"
 import Orders from "./pages/admin/Orders"
-import Account from "./pages/admin/account"
+import Account from "./pages/admin/Account"
 import CreateAccount from "./pages/admin/CreateAccount" 
 import EditAccount from "./pages/admin/EditAccount"
 
@@ -13,7 +13,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         {/* <Route path="/" element={<Home />}/> */}
-        // mac dinh vao admin layout
+        {/* Mặc định vào admin layout */}
         <Route path="/" element={<AdminLayout />}/>
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<Dashboard />} />
