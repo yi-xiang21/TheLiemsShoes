@@ -1,6 +1,7 @@
 import { useNavigate, useLocation } from "react-router-dom"
 import { useState } from "react"
 import axios from "axios"
+import { getApiUrl } from "../../config/config"
 
 function EditAccount() {
     const navigate = useNavigate()
@@ -31,24 +32,24 @@ function EditAccount() {
         setSuccess("")
 
         if (!selectedUser?.id) {
-            setError("Khong tim thay tai khoan can sua. Vui long quay lai trang danh sach.")
+            setError("Không tìm thấy tài khoản cần sửa. Vui lòng quay lại trang danh sách.")
             return
         }
 
         setIsSubmitting(true)
         try {
-            await axios.put(`http://localhost:3000/api/users/${selectedUser.id}`, {
+            await axios.put(getApiUrl(`/api/users/${selectedUser.id}`), {
                 username: formData.username,
                 email: formData.email,
                 role: formData.role,
                 phone_number: formData.phone_number,
             })
-            setSuccess("Cap nhat tai khoan thanh cong")
+            setSuccess("Cập nhật tài khoản thành công")
             setTimeout(() => {
                 navigate("/admin/account")
             }, 500)
         } catch (err) {
-            setError(err.response?.data?.message || "Cap nhat tai khoan that bai")
+            setError(err.response?.data?.message || "Cập nhật tài khoản thất bại")
         } finally {
             setIsSubmitting(false)
         }
@@ -81,7 +82,7 @@ function EditAccount() {
                 </select>
             </div>
             <button type="submit" className="button" disabled={isSubmitting || !selectedUser?.id}>
-                {isSubmitting ? "Dang cap nhat..." : "Update Account"}
+                {isSubmitting ? "Đang cập nhật..." : "Cập Nhật Tài Khoản"}
             </button>
         </form>
     </div>

@@ -1,7 +1,7 @@
 // Cấu hình API URL
-// Thay đổi URL này thành URL của backend server khi deploy
 const API_CONFIG = {
-    BASE_URL: 'http://localhost:3000',
+    // BASE_URL: 'http://localhost:3000',
+    BASE_URL: 'https://be-theliemsshoes.onrender.com',
     
     // Endpoints
     ENDPOINTS: {
@@ -15,3 +15,6 @@ const API_CONFIG = {
   function getApiUrl(endpoint) {
     return API_CONFIG.BASE_URL + endpoint;
   }
+
+// Export để dùng ở các file khác
+export { getApiUrl, API_CONFIG };

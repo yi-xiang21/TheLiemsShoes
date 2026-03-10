@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom"
 import axios from "axios"
 import { useState } from "react"
+import { getApiUrl } from "../../config/config"
 
 function CreateAccount() {
   const navigate = useNavigate()
@@ -30,7 +31,7 @@ function CreateAccount() {
     setIsSubmitting(true)
 
     try {
-      await axios.post("http://localhost:3000/api/users", {
+      await axios.post(getApiUrl("/api/users"), {
         username: formData.username,
         email: formData.email,
         password: formData.password,
@@ -38,7 +39,7 @@ function CreateAccount() {
         phone_number: formData.phone_number,
       })
 
-      setSuccess("Tao tai khoan thanh cong")
+      setSuccess("Tạo tài khoản thành công")
       setFormData({
         username: "",
         email: "",
@@ -50,7 +51,7 @@ function CreateAccount() {
         navigate("/admin/account")
       }, 500)
     } catch (err) {
-      setError(err.response?.data?.message || "Tao tai khoan that bai")
+      setError(err.response?.data?.message || "Tạo tài khoản thất bại")
     } finally {
       setIsSubmitting(false)
     }

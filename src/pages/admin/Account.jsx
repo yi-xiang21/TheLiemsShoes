@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom"
 import axios from "axios"
 import { useEffect, useState } from "react"
+import { getApiUrl } from "../../config/config"
 
 function Account() {
   const navigate = useNavigate()
@@ -12,12 +13,12 @@ function Account() {
   useEffect(() => {
     const fetchUsers = async () => {
   try {
-    const res = await axios.get("http://localhost:3000/api/users")
+    const res = await axios.get(getApiUrl("/api/users"))
 
     setUsers(res.data.data)
 
   } catch (err) {
-    setError("Khong tai duoc danh sach user")
+    setError("Không thể tải được danh sách người dùng")
   } finally {
     setLoading(false)
   }
@@ -27,7 +28,7 @@ function Account() {
   }, [])
 
   const handleDelete = async (userId) => {
-    const confirmed = window.confirm("Ban co chac muon xoa tai khoan nay khong?")
+    const confirmed = window.confirm("Bạn có chắc muốn xóa tài khoản này không?")
     if (!confirmed) {
       return
     }
@@ -35,10 +36,10 @@ function Account() {
     setError("")
     setDeletingId(userId)
     try {
-      await axios.delete(`http://localhost:3000/api/users/${userId}`)
+      await axios.delete(getApiUrl(`/api/users/${userId}`))
       setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userId))
     } catch (err) {
-      setError(err.response?.data?.message || "Xoa tai khoan that bai")
+      setError(err.response?.data?.message || "Xóa tài khoản thất bại")
     } finally {
       setDeletingId(null)
     }
@@ -53,7 +54,7 @@ function Account() {
         </button>
       </div>
       <div className="admin-card-body">
-        {loading && <p>Dang tai du lieu...</p>}
+        {loading && <p>Đang tải dữ liệu...</p>}
         {error && <p>{error}</p>}
 
         <table className="admin-table">
@@ -70,7 +71,7 @@ function Account() {
           <tbody>
             {!loading && users.length === 0 && (
               <tr>
-                <td colSpan="6">Khong co du lieu nguoi dung</td>
+                <td colSpan="6">Không có dữ liệu người dùng</td>
               </tr>
             )}
             {users.map((user) => (
