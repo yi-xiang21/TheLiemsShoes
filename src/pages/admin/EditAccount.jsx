@@ -38,7 +38,7 @@ function EditAccount() {
 
         setIsSubmitting(true)
         try {
-            await axios.put(getApiUrl(`/api/users/${selectedUser.id}`), {
+            await axios.put(getApiUrl(`/users/${selectedUser.id}`), {
                 username: formData.username,
                 email: formData.email,
                 role: formData.role,

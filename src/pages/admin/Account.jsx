@@ -13,7 +13,7 @@ function Account() {
   useEffect(() => {
     const fetchUsers = async () => {
   try {
-    const res = await axios.get(getApiUrl("/api/users"))
+    const res = await axios.get(getApiUrl("/users"))
 
     setUsers(res.data.data)
 
@@ -36,7 +36,7 @@ function Account() {
     setError("")
     setDeletingId(userId)
     try {
-      await axios.delete(getApiUrl(`/api/users/${userId}`))
+      await axios.delete(getApiUrl(`/users/${userId}`))
       setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userId))
     } catch (err) {
       setError(err.response?.data?.message || "Xóa tài khoản thất bại")

@@ -31,7 +31,7 @@ function CreateAccount() {
     setIsSubmitting(true)
 
     try {
-      await axios.post(getApiUrl("/api/users"), {
+      await axios.post(getApiUrl("/users"), {
         username: formData.username,
         email: formData.email,
         password: formData.password,
