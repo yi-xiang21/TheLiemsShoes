@@ -54,7 +54,7 @@ function Account() {
         </button>
       </div>
       <div className="admin-card-body">
-        {loading && <p>Đang tải dữ liệu...</p>}
+        {loading && <p>Đang tải dữ liệu... (Nếu 30s chưa có dữ liệu hãy vào https://be-theliemsshoes.onrender.com để api khởi động)</p>}
         {error && <p>{error}</p>}
 
         <table className="admin-table">
