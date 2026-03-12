@@ -14,7 +14,7 @@ function App() {
       <Routes>
         {/* <Route path="/" element={<Home />}/> */}
         {/* Mặc định vào admin layout */}
-        <Route path="/" element={<AdminLayout />}/>
+        <Route path="/" element={<Account />}/>
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<Dashboard />} />
           <Route path="products" element={<Products />} />
