@@ -72,6 +72,97 @@
   padding: 16px;
 }
 
+.button {
+  display: inline-block;
+  padding: 10px 16px;
+  background-color: #1f2a37;
+  margin: 5px;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.button:hover {
+  background-color: #fe4848;
+}
+
+.admin-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.admin-card-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.create-account-form
+{
+  display: grid;
+  gap: 16px;
+  max-width: 400px;
+}
+.form-group{
+  display: flex;
+  flex-direction: column;
+}
+.form-group label {
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+.form-group input,
+.form-group select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.admin-card-body {
+  overflow-x: hidden;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  border: none;
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 12px 10px;
+  text-align: center;
+  vertical-align: middle;
+  word-break: break-word;
+  border: none;
+}
+
+.admin-table th {
+  color: #1f2a37;
+  font-weight: 600;
+}
+
+.admin-table tbody tr {
+  background-color: #eef3f7;
+  transition: transform 0.2s ease, background-image 0.2s ease;
+  transform-origin: center;
+}
+.admin-table tbody tr:hover {
+  transform: scale(1.01);
+  background-image: linear-gradient(
+    to top,
+    rgba(109, 149, 186, 0.35) 0%,
+    rgba(109, 149, 186, 0.35) 30%,
+    rgba(109, 149, 186, 0.16) 70%,
+    rgba(109, 149, 186, 0) 100%
+  );
+  
+}
+
+
+
 @media (max-width: 768px) {
   .admin-layout {
     grid-template-columns: 1fr;
@@ -83,5 +174,11 @@
 
   .admin-main {
     padding: 16px;
+  }
+
+  .admin-table th,
+  .admin-table td {
+    font-size: 14px;
+    padding: 10px 8px;
   }
 }
