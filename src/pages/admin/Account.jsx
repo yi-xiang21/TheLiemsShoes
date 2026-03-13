@@ -18,7 +18,7 @@ function Account() {
     setUsers(res.data.data)
 
   } catch (err) {
-    setError("Không thể tải được danh sách người dùng")
+    setError("Không thể tải được danh sách người dùng (kiểm tra link https://be-theliemsshoes.onrender.com có hoạt động không)")
   } finally {
     setLoading(false)
   }
