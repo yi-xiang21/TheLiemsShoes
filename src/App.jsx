@@ -7,14 +7,19 @@ import Orders from "./pages/admin/Orders"
 import Account from "./pages/admin/Account"
 import CreateAccount from "./pages/admin/CreateAccount" 
 import EditAccount from "./pages/admin/EditAccount"
+import Login from "./pages/Login"
+import Register from "./pages/Register"
+import User from "./layout/user"
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* <Route path="/" element={<Home />}/> */}
-        {/* Mặc định vào admin layout */}
-        <Route path="/" element={<Account />}/>
+        <Route path="/" element={<User />}>
+          <Route index element={<Home />} />
+          <Route path="Login" element={<Login />} />
+          <Route path="Register" element={<Register />} />
+        </Route>
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<Dashboard />} />
           <Route path="products" element={<Products />} />

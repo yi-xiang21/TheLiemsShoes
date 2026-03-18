@@ -1,8 +1,10 @@
+import Header from "../components/shared/header";
+
 function Home() {
   return (
-    <div>
-      <h1>Welcome to The Liems Shoes</h1>
-    </div>
+    <>
+      <h1>Welcome to the Home Page</h1>
+    </>
   )
 }
 

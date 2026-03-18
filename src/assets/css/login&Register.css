@@ -1,0 +1,127 @@
+.auth-page {
+	min-height: calc(100vh - 72px);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 24px;
+	background: #f5f7fb;
+}
+
+.auth-card {
+	width: 100%;
+	max-width: 420px;
+	background: #ffffff;
+	border-radius: 12px;
+	padding: 28px;
+	box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+}
+
+.auth-title {
+	margin: 0 0 20px;
+	text-align: center;
+	font-size: 28px;
+	font-weight: 700;
+	color: #1f2937;
+}
+
+.auth-form {
+	display: flex;
+	flex-direction: column;
+	gap: 14px;
+}
+
+.auth-field {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.auth-field label {
+	font-size: 14px;
+	font-weight: 600;
+	color: #374151;
+}
+
+.auth-field input {
+	border: 1px solid #d1d5db;
+	border-radius: 8px;
+	padding: 10px 12px;
+	font-size: 15px;
+	outline: none;
+	transition: border-color 0.2s ease;
+}
+
+.auth-field input:focus {
+	border-color: #2563eb;
+}
+
+.auth-password-wrap {
+	position: relative;
+}
+
+.auth-password-wrap input {
+	width: 100%;
+	padding-right: 44px;
+}
+
+.auth-password-toggle {
+	position: absolute;
+	right: 10px;
+	top: 50%;
+	transform: translateY(-50%);
+	border: none;
+	background: transparent;
+	color: #6b7280;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 18px;
+	cursor: pointer;
+}
+
+.auth-password-toggle:hover {
+	color: #1f2937;
+}
+
+.auth-btn {
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	text-decoration: none;
+	border-radius: 8px;
+	border: 1px solid transparent;
+	font-size: 15px;
+	font-weight: 600;
+	padding: 10px 12px;
+	cursor: pointer;
+}
+
+.auth-btn-primary {
+	background: #2563eb;
+	color: #ffffff;
+}
+
+.auth-btn-primary:hover {
+	background: #1d4ed8;
+}
+
+.auth-footer {
+	margin-top: 16px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	align-items: center;
+	color: #4b5563;
+	font-size: 14px;
+}
+
+.auth-btn-outline {
+	width: 100%;
+	border-color: #2563eb;
+	color: #2563eb;
+	background: transparent;
+}
+
+.auth-btn-outline:hover {
+	background: #eff6ff;
+}
