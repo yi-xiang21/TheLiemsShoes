@@ -1,0 +1,156 @@
+.site-footer {
+  margin-top: 48px;
+  background: #ececec;
+  color: #5f6a75;
+  padding: 0 60px 36px;
+}
+
+.site-footer__top-line {
+  height: 1px;
+  background: #d1d1d1;
+  margin-bottom: 52px;
+}
+
+.site-footer__main {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.site-footer__columns {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(170px, 340px));
+  gap: 64px;
+  flex: 1;
+}
+
+.site-footer__heading {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: #101214;
+}
+
+.site-footer__list {
+  margin: 28px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 18px;
+}
+
+.site-footer__link {
+  text-decoration: none;
+  color: #5f6a75;
+  font-size: 15px;
+  line-height: 1.2;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.site-footer__link:hover {
+  color: #111111;
+}
+
+.site-footer__locale {
+  border: 0;
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #5f6a75;
+  font-size: 37px;
+  font-weight: 600;
+  height: fit-content;
+  cursor: pointer;
+  padding: 0;
+}
+
+.site-footer__locale svg {
+  font-size: 20px;
+}
+
+.site-footer__bottom {
+  margin-top: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+
+.site-footer__copyright {
+  margin: 0;
+  color: #5f6a75;
+  font-size: 20px;
+  line-height: 1.2;
+  font-weight: 500;
+}
+
+.site-footer__meta-links {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.site-footer__meta-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.site-footer__meta-link svg {
+  font-size: 16px;
+}
+
+@media (max-width: 1200px) {
+  .site-footer {
+    padding: 0 24px 28px;
+  }
+
+  .site-footer__main {
+    flex-direction: column;
+    gap: 26px;
+  }
+
+  .site-footer__columns {
+    grid-template-columns: repeat(2, minmax(180px, 1fr));
+    gap: 36px;
+  }
+
+  .site-footer__heading {
+    font-size: 18px;
+  }
+
+  .site-footer__link,
+  .site-footer__copyright,
+  .site-footer__locale {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 720px) {
+  .site-footer__top-line {
+    margin-bottom: 28px;
+  }
+
+  .site-footer__columns {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .site-footer__list {
+    margin-top: 12px;
+    gap: 10px;
+  }
+
+  .site-footer__bottom {
+    margin-top: 40px;
+    gap: 16px;
+  }
+
+  .site-footer__meta-links {
+    gap: 16px;
+  }
+}

@@ -34,7 +34,7 @@ function Register() {
     setIsSubmitting(true)
 
     try {
-      await axios.post(getApiUrl("/users"), {
+      await axios.post(getApiUrl("/auth/register"), {
         username: formData.username,
         email: formData.email,
         password: formData.password,

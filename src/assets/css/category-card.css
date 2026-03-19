@@ -1,0 +1,30 @@
+.category-card {
+  width: 120px;
+  min-width: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.category-card__name {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.2;
+  font-weight: 700;
+  color: #111111;
+}
+
+@media (max-width: 768px) {
+  .category-card {
+    width: 96px;
+    min-width: 96px;
+    gap: 8px;
+  }
+
+  .category-card__name {
+    font-size: 14px;
+  }
+}

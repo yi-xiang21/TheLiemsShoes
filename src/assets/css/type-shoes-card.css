@@ -1,0 +1,40 @@
+.type-shoes-card {
+  width: min(100%, 360px);
+  background: #ececec;
+  display: flex;
+  flex-direction: column;
+}
+
+.type-shoes-card__image-wrap {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: #dcdcdc;
+}
+
+.type-shoes-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.type-shoes-card__name {
+  margin: 0;
+  padding: 10px 16px 12px;
+  font-size: 28px;
+  line-height: 1.2;
+  font-weight: 500;
+  color: #101010;
+}
+
+@media (max-width: 768px) {
+  .type-shoes-card {
+    width: 100%;
+  }
+
+  .type-shoes-card__name {
+    font-size: 22px;
+    padding: 8px 12px 10px;
+  }
+}
