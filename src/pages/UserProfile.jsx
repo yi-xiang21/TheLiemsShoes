@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { getApiUrl } from "../config/config";
+import { getApiUrl } from "../config/config.js";
 import "../assets/css/userProfile.css"
 function UserProfile () {
     const token = localStorage.getItem("token");

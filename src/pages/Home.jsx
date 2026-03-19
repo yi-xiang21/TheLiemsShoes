@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import CardProducts from "../components/shared/CardProducts";
+import CardProducts from "../components/shared/CardProducts.jsx";
 import "../assets/css/home.css";
-import CardCategorys from "../components/shared/CardCategorys";
-import CardTypeShoes from "../components/shared/CardTypeShoes";
+import CardCategorys from "../components/shared/CardCategorys.jsx";
+import CardTypeShoes from "../components/shared/CardTypeShoes.jsx";
 import axios from "axios";
-import { getApiUrl } from "../config/config";
+import { getApiUrl } from "../config/config.js";
 
 function Home() {
   const [category, setCategory] = useState([]);

@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom"
 import axios from "axios"
 import { useState } from "react"
-import { getApiUrl } from "../../config/config"
+import { getApiUrl } from "../../config/config.js"
 
 function CreateAccount() {
   const navigate = useNavigate()

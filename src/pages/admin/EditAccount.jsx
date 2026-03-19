@@ -1,7 +1,7 @@
 import { useNavigate, useLocation } from "react-router-dom"
 import { useState } from "react"
 import axios from "axios"
-import { getApiUrl } from "../../config/config"
+import { getApiUrl } from "../../config/config.js"
 
 function EditAccount() {
     const navigate = useNavigate()

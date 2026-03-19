@@ -2,7 +2,7 @@ import { useState } from "react"
 import { FiEye, FiEyeOff } from "react-icons/fi"
 import "../assets/css/login&Register.css"
 import axios from "axios"
-import { getApiUrl } from "../config/config"
+import { getApiUrl } from "../config/config.js"
 import { useNavigate } from "react-router-dom"
 import LoginBanner from "../assets/images/pictureLogin.jpg"
 

@@ -3,7 +3,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { FiSearch, FiShoppingCart, FiUser } from "react-icons/fi";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { getApiUrl } from "../../config/config";
+import { getApiUrl } from "../../config/config.js";
 
 
 function Header() {
