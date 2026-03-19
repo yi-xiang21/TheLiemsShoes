@@ -12,17 +12,15 @@ function Account() {
 
   useEffect(() => {
     const fetchUsers = async () => {
-  try {
-    const res = await axios.get(getApiUrl("/users"))
-
-    setUsers(res.data.data)
-
-  } catch (err) {
-    setError("Không thể tải được danh sách người dùng (kiểm tra link https://be-theliemsshoes.onrender.com có hoạt động không)")
-  } finally {
-    setLoading(false)
-  }
-}
+      try {
+        const res = await axios.get(getApiUrl("/users"))
+        setUsers(res.data.data)
+      } catch {
+        setError("Không thể tải được danh sách người dùng (kiểm tra link https://be-theliemsshoes.onrender.com có hoạt động không)")
+      } finally {
+        setLoading(false)
+      }
+    }
 
     fetchUsers()
   }, [])
