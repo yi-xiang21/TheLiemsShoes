@@ -7,8 +7,7 @@ import Orders from "./pages/admin/Orders"
 import Account from "./pages/admin/Account"
 import CreateAccount from "./pages/admin/CreateAccount" 
 import EditAccount from "./pages/admin/EditAccount"
-import Login from "./pages/Login"
-import Register from "./pages/Register"
+import Login from "./pages/Login&Register"
 import User from "./layout/User"
 
 function App() {
@@ -18,7 +17,6 @@ function App() {
         <Route path="/" element={<User />}>
           <Route index element={<Home />} />
           <Route path="Login" element={<Login />} />
-          <Route path="Register" element={<Register />} />
         </Route>
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<Dashboard />} />

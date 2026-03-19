@@ -109,6 +109,17 @@
   cursor: pointer;
 }
 
+.header-user-email {
+  font-size: 14px;
+  line-height: 1;
+  font-weight: 600;
+  color: #2a2a2a;
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .nav-row {
   min-height: 46px;
   display: grid;

@@ -1,9 +1,47 @@
 import "../../assets/css/header.css";
 import { NavLink, useNavigate } from "react-router-dom";
 import { FiSearch, FiShoppingCart, FiUser } from "react-icons/fi";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { getApiUrl } from "../../config/config";
+
 
 function Header() {
   const navigate = useNavigate();
+  const [userEmail, setUserEmail] = useState("");
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      return;
+    }
+
+    const fetchProfile = async () => {
+      try {
+        const response = await axios.get(getApiUrl("/auth/profile"), {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        setUserEmail(response.data?.user?.email || "");
+      } catch {
+        setUserEmail("");
+      }
+    };
+
+    fetchProfile();
+  }, []);
+
+  const handleAccountClick = () => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/UserProfile");
+      return;
+    }
+
+    navigate("/Login");
+  };
 
   return (
     <header className="site-header">
@@ -24,10 +62,11 @@ function Header() {
           <button
             type="button"
             aria-label="Account"
-            onClick={() => navigate("/Login")}
+            onClick={handleAccountClick}
           >
             <FiUser className="header-icon" aria-hidden="true" />
           </button>
+          {userEmail && <span className="header-user-email">{userEmail}</span>}
           <button type="button" aria-label="Cart">
             <FiShoppingCart className="header-icon" aria-hidden="true" />
           </button>
