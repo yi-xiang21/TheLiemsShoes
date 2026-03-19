@@ -8,13 +8,13 @@ import Account from "./pages/admin/Account"
 import CreateAccount from "./pages/admin/CreateAccount" 
 import EditAccount from "./pages/admin/EditAccount"
 import Login from "./pages/Login&Register"
-import User from "./layout/User"
+import UserLayout from "./layout/User"
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<User />}>
+        <Route path="/" element={<UserLayout />}>
           <Route index element={<Home />} />
           <Route path="Login" element={<Login />} />
         </Route>
