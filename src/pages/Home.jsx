@@ -18,7 +18,7 @@ function Home() {
 
         setCategory(res.data.data);
 
-      } catch (err) {
+      } catch {
         setError(
           "Không thể tải được danh sách danh mục (kiểm tra link https://be-theliemsshoes.onrender.com có hoạt động không)",
         );
