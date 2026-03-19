@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import Home from "./pages/Home" 
-import AdminLayout from "./layout/Admin"
+import AdminLayout from "./layout/admin"
 import Dashboard from "./pages/admin/Dashboard"
 import Products from "./pages/admin/Products"
 import Orders from "./pages/admin/Orders"
@@ -8,7 +8,7 @@ import Account from "./pages/admin/Account"
 import CreateAccount from "./pages/admin/CreateAccount" 
 import EditAccount from "./pages/admin/EditAccount"
 import Login from "./pages/Login&Register"
-import User from "./layout/User"
+import User from "./layout/user"
 
 function App() {
   return (
