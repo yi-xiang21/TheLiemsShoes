@@ -12,6 +12,8 @@ import homeVideo3 from "../assets/video/homeVideo3.mp4";
 import homeBanner1 from "../assets/images/HomeBanner1.jpg";
 import homeBanner2 from "../assets/images/HomeBanner2.jpg";
 import homeBanner3 from "../assets/images/HomeBanner3.jpg";
+import homeBanner4 from "../assets/images/HomeBanner4.jpg";
+import homeBanner5 from "../assets/images/HomeBanner5.jpg";
 
 function Home() {
   const [category, setCategory] = useState([]);
@@ -20,7 +22,7 @@ function Home() {
   const [showHomeVideo, setShowHomeVideo] = useState(false);
   const [bannerIndex, setBannerIndex] = useState(0);
   const homeVideoRef = useRef(null);
-  const homeBanners = [homeBanner1, homeBanner2, homeBanner3];
+  const homeBanners = [homeBanner1, homeBanner2, homeBanner3, homeBanner4, homeBanner5];
 
   useEffect(() => {
     const fetchCategory = async () => {
@@ -28,6 +30,7 @@ function Home() {
         const res = await axios.get(getApiUrl("/categories"));
 
         setCategory(res.data.data);
+        console.log(res.data.data);
 
       } catch {
         setError(

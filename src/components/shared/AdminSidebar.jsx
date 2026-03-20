@@ -17,6 +17,9 @@ function AdminSidebar() {
         <NavLink to="/admin/account" className="admin-nav-link">
           Account
         </NavLink>
+        <NavLink to="/admin/categories" className="admin-nav-link">
+          Categories
+        </NavLink>
         <NavLink to="/" className="admin-nav-link">
           Home
         </NavLink>

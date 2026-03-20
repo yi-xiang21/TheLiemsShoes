@@ -15,6 +15,9 @@ import LogOut from "./pages/LogOutPage.jsx"
 import { AuthProvider } from "./context/AuthContext.jsx"
 import LayoutShopProduct from "./layout/ShopProduct.jsx"
 import About from "./pages/About.jsx"
+import Category from "./pages/admin/Category.jsx"
+import CreateCategory from "./pages/admin/CreateCategory.jsx"
+import EditCategory from "./pages/admin/EditCategory.jsx"
 
 function App() {
   return (
@@ -36,6 +39,9 @@ function App() {
           <Route path="products" element={<Products />} />
           <Route path="orders" element={<Orders />} />
           <Route path="account" element={<Account />} />
+          <Route path="categories" element={<Category />} />
+          <Route path="CreateCategory" element={<CreateCategory />} />
+          <Route path="EditCategory" element={<EditCategory />} />
           <Route path="CreateAccount" element={<CreateAccount/>} />
           <Route path="EditAccount" element={<EditAccount/>} />
         </Route>
