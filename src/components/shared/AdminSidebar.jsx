@@ -17,6 +17,12 @@ function AdminSidebar() {
         <NavLink to="/admin/account" className="admin-nav-link">
           Account
         </NavLink>
+        <NavLink to="/" className="admin-nav-link">
+          Home
+        </NavLink>
+         <NavLink to="/logout" className="admin-nav-link">
+          Logout
+        </NavLink>
       </nav>
     </aside>
   );

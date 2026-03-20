@@ -1,44 +1,25 @@
 import "../../assets/css/header.css";
 import { NavLink, useNavigate } from "react-router-dom";
 import { FiSearch, FiShoppingCart, FiUser } from "react-icons/fi";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { getApiUrl } from "../../config/config.js";
+import { useAuth } from "../../context/useAuth.js";
 
 
 function Header() {
   const navigate = useNavigate();
-  const [userEmail, setUserEmail] = useState("");
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      return;
-    }
-
-    const fetchProfile = async () => {
-      try {
-        const response = await axios.get(getApiUrl("/auth/profile"), {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        setUserEmail(response.data?.user?.email || "");
-      } catch {
-        setUserEmail("");
-      }
-    };
-
-    fetchProfile();
-  }, []);
+  const { user } = useAuth();
 
   const handleAccountClick = () => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token");  
+    const role = localStorage.getItem("role");
+    if (role === "admin") {
+      navigate("/admin");
+      return;
+    }
     if (token) {
       navigate("/UserProfile");
       return;
     }
+    
 
     navigate("/Login");
   };
@@ -66,7 +47,7 @@ function Header() {
           >
             <FiUser className="header-icon" aria-hidden="true" />
           </button>
-          {userEmail && <span className="header-user-email">{userEmail}</span>}
+          {user?.email && <span className="header-user-email">{user.email}</span>}
           <button type="button" aria-label="Cart">
             <FiShoppingCart className="header-icon" aria-hidden="true" />
           </button>
@@ -75,6 +56,7 @@ function Header() {
 
       <nav className="site-header-inner nav-row" aria-label="Primary">
         <NavLink to="/">Home </NavLink>
+        <NavLink to="/Shop">Shop</NavLink>
       </nav>
     </header>
   );

@@ -5,9 +5,11 @@ import axios from "axios"
 import { getApiUrl } from "../config/config.js"
 import { useNavigate } from "react-router-dom"
 import LoginBanner from "../assets/images/pictureLogin.jpg"
+import { useAuth } from "../context/useAuth.js"
 
 function Login() {
   const navigate = useNavigate()
+  const { login } = useAuth()
   const [mode, setMode] = useState("login")
   const [showLoginPassword, setShowLoginPassword] = useState(false)
   const [showRegisterPassword, setShowRegisterPassword] = useState(false)
@@ -61,9 +63,14 @@ function Login() {
       })
 
       const token = response.data?.token
+      const id=response.data?.user?.id
+      const role=response.data?.user?.role
       if (token) {
-        localStorage.setItem("token", token)
+        login(token, id, role)
       }
+
+      
+       
 
       setSuccess("Đăng nhập thành công")
       setLoginData({

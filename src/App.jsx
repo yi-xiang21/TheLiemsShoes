@@ -9,14 +9,22 @@ import CreateAccount from "./pages/admin/CreateAccount.jsx"
 import EditAccount from "./pages/admin/EditAccount.jsx"
 import Login from "./pages/Login&Register.jsx"
 import UserLayout from "./layout/User.jsx"
+import UserProfile from "./pages/UserProfile.jsx"
+import Shop from "./pages/Shop.jsx"
+import LogOut from "./pages/Logout.jsx"
+import { AuthProvider } from "./context/AuthContext.jsx"
 
 function App() {
   return (
-    <BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
       <Routes>
         <Route path="/" element={<UserLayout />}>
           <Route index element={<Home />} />
           <Route path="Login" element={<Login />} />
+          <Route path="UserProfile" element={<UserProfile />} />
+          <Route path="Shop" element={<Shop />} />
+          <Route path="Logout" element={<LogOut />} />
         </Route>
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<Dashboard />} />
@@ -27,7 +35,8 @@ function App() {
           <Route path="EditAccount" element={<EditAccount/>} />
         </Route>
       </Routes>
-    </BrowserRouter>
+      </BrowserRouter>
+    </AuthProvider>
   )
 }
 

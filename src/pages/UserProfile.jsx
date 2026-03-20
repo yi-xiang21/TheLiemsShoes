@@ -47,6 +47,9 @@ function UserProfile () {
             <p><strong>Email:</strong> {userEmail}</p>
             <p><strong>Họ tên:</strong> {userName}</p>
             <p><strong>Số điện thoại:</strong> {userPhone}</p>
+            <button>
+                <a href="/Logout" className="logout-link">Đăng xuất</a>
+            </button>
         </section>
     );
 }
