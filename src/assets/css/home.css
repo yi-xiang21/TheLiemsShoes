@@ -1,19 +1,48 @@
 .homeBanner{
-    background-image: url("../images/HomeBanner.jpg");
-    background-size: cover;
+    position: relative;
     margin: 0px 40px;
-    background-position: center;
     height: 600px;
     display: flex;
     justify-content: center;
-    color: rgb(0, 0, 0);
+    align-items: flex-end;
+    overflow: hidden;
+    border-radius: 12px;
+    color: #ffffff;
     text-align: center;
 }
 
+.homeBannerTrack {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    transition: transform 0.8s ease;
+}
+
+.homeBannerSlide {
+    min-width: 100%;
+    height: 100%;
+}
+
+.homeBannerImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
 .homeBannerSubtitle{
-    font-size: 20px;
+    position: absolute;
+    left: 50%;
+    bottom: 24px;
+    transform: translateX(-50%);
+    z-index: 2;
+    width: calc(100% - 32px);
+    font-size: clamp(15px, 1.7vw, 22px);
+    line-height: 1.45;
     font-weight: 400;
-    margin-top: 550px;
+    letter-spacing: 0.3px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+    margin: 0;
 }
 .homeCollection{
     display: flex;
@@ -156,4 +185,110 @@
     margin-top: 20px;
     width: 100%;
     padding: 8px 8px 14px;
+}
+
+.HomeVideo {
+    width: 100%;
+    margin: 44px auto 14px;
+    height: min(130vh, 1300px);
+    display: grid;
+    grid-template-columns: 1.25fr 1fr;
+    align-items: stretch;
+    overflow: hidden;
+}
+
+.homeVideoLeft,
+.homeVideoTop,
+.homeVideoBottom {
+    position: relative;
+    overflow: hidden;
+    border-radius: 16px;
+}
+
+.homeVideoLeft {
+    height: 60%;
+    width: 80%;
+}
+
+.homeVideoRight {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: 60%;
+}
+
+.homeVideoTop {
+    height: 40%;
+}
+
+.homeVideoLeft video,
+.homeVideoTop video,
+.homeVideoBottom video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+}
+
+.homeVideoTop:hover video,
+.homeVideoBottom:hover video {
+    transform: scale(1.03);
+}
+
+.homeVideoRevealLeft,
+.homeVideoRevealRight {
+    opacity: 0;
+    will-change: transform, opacity;
+    transition: transform 0.9s cubic-bezier(0.22, 0.61, 0.36, 1), opacity 0.75s ease;
+}
+
+.homeVideoRevealLeft {
+    transform: translateX(-100px);
+}
+
+.homeVideoRevealRight {
+    transform: translateX(100px);
+}
+
+.HomeVideo--visible .homeVideoRevealLeft {
+    opacity: 1;
+    transform: translateX(80px);
+}
+
+.HomeVideo--visible .homeVideoRevealRight {
+    opacity: 1;
+    transform: translateX(-90px);
+}
+
+.homeVideoDelayOne {
+    transition-delay: 0s;
+}
+
+.homeVideoDelayTwo {
+    transition-delay: 0s;
+}
+
+.HomeVideo--visible .homeVideoDelayOne {
+    transition-delay: 0.14s;
+}
+
+.HomeVideo--visible .homeVideoDelayTwo {
+    transition-delay: 0.34s;
+}
+
+@media (max-width: 920px) {
+    .HomeVideo {
+        grid-template-columns: 1fr;
+        height: auto;
+    }
+
+    .homeVideoLeft {
+        min-height: 300px;
+    }
+
+    .homeVideoTop,
+    .homeVideoBottom {
+        min-height: 220px;
+    }
 }

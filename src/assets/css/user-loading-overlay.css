@@ -1,0 +1,31 @@
+.user-loading-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(2px);
+  pointer-events: all;
+}
+
+.user-loading-overlay__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+}
+
+.user-loading-overlay__animation {
+  width: min(180px, 36vw);
+  height: min(180px, 36vw);
+}
+
+.user-loading-overlay__text {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1f2937;
+}

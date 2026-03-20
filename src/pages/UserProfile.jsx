@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { getApiUrl } from "../config/config.js";
 import "../assets/css/userProfile.css"
+
 function UserProfile () {
     const token = localStorage.getItem("token");
     const [userEmail, setUserEmail] = useState("");
@@ -34,22 +35,55 @@ function UserProfile () {
     }, [token]);
 
     if (!token) {
-        return <p>Bạn cần đăng nhập để xem thông tin cá nhân</p>;
+        return (
+            <section className="user-profile user-profile--state">
+                <div className="user-profile-card">
+                    <h1 className="user-profile-title">Thông tin cá nhân</h1>
+                    <p className="user-profile-state-text">Bạn cần đăng nhập để xem thông tin cá nhân.</p>
+                    <a href="/Login" className="user-profile-action">Đến trang đăng nhập</a>
+                </div>
+            </section>
+        );
     }
 
     if (error) {
-        return <p>{error}</p>;
+        return (
+            <section className="user-profile user-profile--state">
+                <div className="user-profile-card">
+                    <h1 className="user-profile-title">Thông tin cá nhân</h1>
+                    <p className="user-profile-state-text">{error}</p>
+                </div>
+            </section>
+        );
     }
     
     return (
         <section className="user-profile">
-            <h1>Thông tin cá nhân</h1>
-            <p><strong>Email:</strong> {userEmail}</p>
-            <p><strong>Họ tên:</strong> {userName}</p>
-            <p><strong>Số điện thoại:</strong> {userPhone}</p>
-            <button>
-                <a href="/Logout" className="logout-link">Đăng xuất</a>
-            </button>
+            <div className="user-profile-card">
+                <div className="user-profile-header">
+                    <h1 className="user-profile-title">Thông tin cá nhân</h1>
+                    <p className="user-profile-subtitle">Quản lý thông tin tài khoản của bạn</p>
+                </div>
+
+                <div className="user-profile-content">
+                    <div className="user-profile-item">
+                        <span className="user-profile-label">Email</span>
+                        <span className="user-profile-value">{userEmail || "Chưa cập nhật"}</span>
+                    </div>
+                    <div className="user-profile-item">
+                        <span className="user-profile-label">Họ tên</span>
+                        <span className="user-profile-value">{userName || "Chưa cập nhật"}</span>
+                    </div>
+                    <div className="user-profile-item user-profile-item--last">
+                        <span className="user-profile-label">Số điện thoại</span>
+                        <span className="user-profile-value">{userPhone || "Chưa cập nhật"}</span>
+                    </div>
+                </div>
+
+                <div className="user-profile-footer">
+                    <a href="/Logout" className="user-profile-logout">Đăng xuất</a>
+                </div>
+            </div>
         </section>
     );
 }

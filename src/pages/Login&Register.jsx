@@ -6,6 +6,7 @@ import { getApiUrl } from "../config/config.js"
 import { useNavigate } from "react-router-dom"
 import LoginBanner from "../assets/images/pictureLogin.jpg"
 import { useAuth } from "../context/useAuth.js"
+import UserLoadingOverlay from "../components/shared/UserLoadingOverlay.jsx"
 
 function Login() {
   const navigate = useNavigate()
@@ -128,6 +129,10 @@ function Login() {
 
   return (
     <section className="auth-page auth-page-split">
+      <UserLoadingOverlay
+        show={isSubmitting}
+        text={mode === "login" ? "Đang đăng nhập..." : "Đang tạo tài khoản..."}
+      />
       <div className={`auth-shell ${mode === "register" ? "auth-shell--register" : ""}`}>
         <div className="auth-visual" aria-hidden="true">
           <img src={LoginBanner} alt="" />
