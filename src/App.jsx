@@ -11,7 +11,7 @@ import Login from "./pages/Login&Register.jsx"
 import UserLayout from "./layout/User.jsx"
 import UserProfile from "./pages/UserProfile.jsx"
 import Shop from "./pages/Shop.jsx"
-import LogOut from "./pages/Logout.jsx"
+import LogOut from "./pages/LogOut.jsx"
 import { AuthProvider } from "./context/AuthContext.jsx"
 
 function App() {
