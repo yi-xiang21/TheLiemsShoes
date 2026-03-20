@@ -57,6 +57,7 @@ function Header() {
       <nav className="site-header-inner nav-row" aria-label="Primary">
         <NavLink to="/">Home </NavLink>
         <NavLink to="/Shop">Shop</NavLink>
+        <NavLink to="/About">About</NavLink>
       </nav>
     </header>
   );

@@ -13,6 +13,8 @@ import UserProfile from "./pages/UserProfile.jsx"
 import Shop from "./pages/Shop.jsx"
 import LogOut from "./pages/LogOutPage.jsx"
 import { AuthProvider } from "./context/AuthContext.jsx"
+import LayoutShopProduct from "./layout/ShopProduct.jsx"
+import About from "./pages/About.jsx"
 
 function App() {
   return (
@@ -23,7 +25,10 @@ function App() {
           <Route index element={<Home />} />
           <Route path="Login" element={<Login />} />
           <Route path="UserProfile" element={<UserProfile />} />
-          <Route path="Shop" element={<Shop />} />
+          <Route path="About" element={<About />} />
+            <Route path="Shop" element={<LayoutShopProduct />} >
+              <Route index element={<Shop />} />
+            </Route>
           <Route path="Logout" element={<LogOut />} />
         </Route>
         <Route path="/admin" element={<AdminLayout />}>
