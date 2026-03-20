@@ -8,7 +8,8 @@ const API_CONFIG = {
     ENDPOINTS: {
       LOGIN: '/auth/login',
       REGISTER: '/auth/register',
-      LOGOUT: '/auth/logout'
+      LOGOUT: '/auth/logout',
+      PROFILE: '/auth/profile'
     }
   };
   
