@@ -18,6 +18,8 @@ import About from "./pages/About.jsx"
 import Category from "./pages/admin/Category.jsx"
 import CreateCategory from "./pages/admin/CreateCategory.jsx"
 import EditCategory from "./pages/admin/EditCategory.jsx"
+import CreateProducts from "./pages/admin/CreateProducts.jsx"
+import EditProducts from "./pages/admin/EditProducts.jsx"
 
 function App() {
   return (
@@ -37,6 +39,8 @@ function App() {
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<Dashboard />} />
           <Route path="products" element={<Products />} />
+          <Route path="CreateProducts" element={<CreateProducts />} />
+          <Route path="EditProducts" element={<EditProducts />} />
           <Route path="orders" element={<Orders />} />
           <Route path="account" element={<Account />} />
           <Route path="categories" element={<Category />} />

@@ -87,6 +87,31 @@
   background-color: #fe4848;
 }
 
+.button-add-product {
+  font-weight: 600;
+  min-width: 180px;
+}
+
+.admin-row-actions {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.button-action {
+  margin: 0;
+  padding: 8px 12px;
+  min-width: 70px;
+}
+
+.button-delete {
+  background-color: #9f2f2f;
+}
+
+.button-delete:hover {
+  background-color: #fe4848;
+}
+
 .admin-card-header {
   display: flex;
   justify-content: space-between;
@@ -104,6 +129,12 @@
   gap: 16px;
   max-width: 400px;
 }
+
+.create-product-form {
+  max-width: 100%;
+  grid-template-columns: repeat(2, minmax(240px, 1fr));
+}
+
 .form-group{
   display: flex;
   flex-direction: column;
@@ -119,15 +150,64 @@
   border-radius: 8px;
 }
 
+.form-group textarea {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  resize: vertical;
+  font-family: inherit;
+}
+
+.form-group-full {
+  grid-column: 1 / -1;
+}
+
+.admin-form-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.button-secondary {
+  background-color: #4f5f71;
+}
+
+.button-secondary:hover {
+  background-color: #67788d;
+}
+
+.admin-form-message {
+  margin: 0 0 12px;
+  font-weight: 500;
+}
+
+.admin-form-message.error {
+  color: #b30000;
+}
+
+.admin-form-message.success {
+  color: #1f7a3e;
+}
+
+.admin-form-hint {
+  margin-top: 6px;
+  color: #4f5f71;
+  font-size: 12px;
+}
+
 .admin-card-body {
   overflow-x: hidden;
+}
+
+.admin-table-wrap {
+  overflow-x: auto;
 }
 
 .admin-table {
   width: 100%;
   border-collapse: collapse;
-  table-layout: fixed;
+  table-layout: auto;
   border: none;
+  min-width: 980px;
 }
 
 .admin-table th,
@@ -180,5 +260,9 @@
   .admin-table td {
     font-size: 14px;
     padding: 10px 8px;
+  }
+
+  .create-product-form {
+    grid-template-columns: 1fr;
   }
 }
