@@ -3,6 +3,59 @@
   background: #e6e6e6;
   display: flex;
   flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.product-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to top,
+    rgba(37, 99, 235, 0.24) 0%,
+    rgba(59, 130, 246, 0.14) 50%,
+    rgba(59, 130, 246, 0) 100%
+  );
+  opacity: 0;
+  transform: translateY(100%);
+  transition: transform 0.28s ease, opacity 0.28s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.product-card:hover::after {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.product-card:hover {
+  animation: productCardBounce 0.35s ease;
+  box-shadow: 0 8px 20px rgba(30, 64, 175, 0.14);
+}
+
+.product-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes productCardBounce {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  45% {
+    transform: translateY(-5px) scale(1.01);
+  }
+  70% {
+    transform: translateY(1px) scale(0.998);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
 }
 
 .product-card__image-wrap {

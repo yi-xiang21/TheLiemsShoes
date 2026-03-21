@@ -16,6 +16,16 @@
   top: 20px;
 }
 
+.shop-sidebar__tagline {
+  margin: 0 0 14px;
+  padding: 0 6px;
+  color: #010101;
+  font-size: 20px;
+  line-height: 1.35;
+  text-align: center;
+  font-weight: bold;
+}
+
 .sidebar-scroll {
   overflow-y: auto;
   max-height: calc(100vh - 200px);
@@ -181,6 +191,12 @@
     max-height: none;
     border-right: none;
     border-bottom: 1px solid #e0e0e0;
+  }
+
+  .shop-sidebar__tagline {
+    font-size: 15px;
+    padding: 0;
+    margin-bottom: 12px;
   }
 
   .sidebar-scroll {
