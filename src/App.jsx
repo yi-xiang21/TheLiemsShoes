@@ -21,6 +21,7 @@ import EditCategory from "./pages/admin/EditCategory.jsx"
 import CreateProducts from "./pages/admin/CreateProducts.jsx"
 import EditProducts from "./pages/admin/EditProducts.jsx"
 import Cart from "./pages/Cart.jsx"
+import Checkout from "./pages/Checkout";
 function App() {
   return (
     <AuthProvider>
@@ -32,6 +33,7 @@ function App() {
           <Route path="UserProfile" element={<UserProfile />} />
           <Route path="About" element={<About />} />
           <Route path="Cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
             <Route path="Shop" element={<LayoutShopProduct />} >
               <Route index element={<Shop />} />
             </Route>

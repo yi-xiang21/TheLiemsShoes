@@ -1,8 +1,9 @@
 import "../assets/css/cart.css";
 import ItemsCart from "../components/shared/ItemsCart.jsx";
 import { useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 function Cart() {
+  const navigate = useNavigate();
   const [cartItems, setCartItems] = useState([
     {
       id: 1,
@@ -104,7 +105,9 @@ function Cart() {
               <strong>6.650.000 ₫</strong>
             </div>
 
-            <button type="button" className="checkout-btn">
+            <button type="button" className="checkout-btn" 
+            onClick={() => navigate("/checkout", { state: { cartItems } })}
+            >
               Thanh toán
             </button>
           </div>
