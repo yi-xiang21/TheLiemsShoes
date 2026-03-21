@@ -2,6 +2,7 @@ import "../assets/css/cart.css";
 import ItemsCart from "../components/shared/ItemsCart.jsx";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 function Cart() {
   const navigate = useNavigate();
   const [cartItems, setCartItems] = useState([
@@ -41,6 +42,19 @@ function Cart() {
       image: "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&w=240&q=80"
     }
   ]);
+
+  const parsePriceToNumber = (price) => {
+    const numberString = String(price).replace(/[^\d]/g, "");
+    return Number(numberString) || 0;
+  };
+
+  const formatCurrencyVND = (value) => {
+    return new Intl.NumberFormat("vi-VN").format(value) + " ₫";
+  };
+
+  const totalPrice = cartItems.reduce((sum, item) => {
+    return sum + parsePriceToNumber(item.price) * item.quantity;
+  }, 0);
 
   const handleIncreaseQuantity = (itemId) => {
     setCartItems((prevItems) =>
@@ -102,11 +116,11 @@ function Cart() {
 
             <div className="total-row">
               <span>Total</span>
-              <strong>6.650.000 ₫</strong>
+              <strong>{formatCurrencyVND(totalPrice)}</strong>
             </div>
 
             <button type="button" className="checkout-btn" 
-            onClick={() => navigate("/checkout", { state: { cartItems } })}
+            onClick={() => navigate("/Checkout", { state: { cartItems } })}
             >
               Thanh toán
             </button>

@@ -6,6 +6,7 @@ import { getApiUrl } from "../../config/config.js";
 function Products() {
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
+  const [productTypes, setProductTypes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [deletingId, setDeletingId] = useState(null);
@@ -15,8 +16,13 @@ function Products() {
       try {
         setLoading(true);
         setError("");
-        const response = await axios.get(getApiUrl("/products"));
-        setProducts(Array.isArray(response.data?.data) ? response.data.data : []);
+        const [productsResponse, productTypesResponse] = await Promise.all([
+          axios.get(getApiUrl("/products")),
+          axios.get(getApiUrl("/products/types"))
+        ]);
+
+        setProducts(Array.isArray(productsResponse.data?.data) ? productsResponse.data.data : []);
+        setProductTypes(Array.isArray(productTypesResponse.data?.data) ? productTypesResponse.data.data : []);
       } catch (err) {
         setError(err.response?.data?.message || "Không thể tải danh sách sản phẩm");
       } finally {
@@ -27,19 +33,21 @@ function Products() {
     fetchProducts();
   }, []);
 
-  const dataFields = useMemo(() => {
-    if (!products.length) {
-      return [
-        "id",
-        "product name",
-        "price",
-        "stock quantity",
-        "category name"
-      ];
-    }
+  const columns = [
+    { field: "id", label: "Mã SP" },
+    { field: "product_name", label: "Tên sản phẩm" },
+    { field: "price", label: "Giá" },
+    { field: "stock_quantity", label: "Tồn kho" },
+    { field: "category_name", label: "Danh mục" },
+    { field: "product_type_name", label: "Loại sản phẩm" }
+  ];
 
-    return Object.keys(products[0]).filter((field) => field !== "images");
-  }, [products]);
+  const productTypeMap = useMemo(() => {
+    return productTypes.reduce((map, type) => {
+      map[type.id] = type.type_name;
+      return map;
+    }, {});
+  }, [productTypes]);
 
   const handleEditProduct = (product) => {
     navigate("/admin/EditProducts", { state: { product } });
@@ -91,8 +99,8 @@ function Products() {
           <table className="admin-table">
             <thead>
               <tr>
-                {dataFields.map((header) => (
-                  <th key={header}>{header}</th>
+                {columns.map((column) => (
+                  <th key={column.field}>{column.label}</th>
                 ))}
                 <th>Actions</th>
               </tr>
@@ -100,14 +108,19 @@ function Products() {
             <tbody>
               {products.length === 0 ? (
                 <tr>
-                  <td colSpan={dataFields.length + 1}>Không có dữ liệu sản phẩm</td>
+                  <td colSpan={columns.length + 1}>Không có dữ liệu sản phẩm</td>
                 </tr>
               ) : (
                 products.map((product) => (
                   <tr key={product.id}>
-                    {dataFields.map((field) => (
-                      <td key={`${product.id}-${field}`}>{formatCellValue(product[field])}</td>
-                    ))}
+                    {columns.map((column) => {
+                      const value =
+                        column.field === "product_type_name"
+                          ? productTypeMap[product.product_type_id]
+                          : product[column.field];
+
+                      return <td key={`${product.id}-${column.field}`}>{formatCellValue(value)}</td>;
+                    })}
                     <td>
                       <div className="admin-row-actions">
                         <button

@@ -6,6 +6,7 @@ import { getApiUrl } from "../../config/config.js";
 function CreateProducts() {
   const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
+  const [productTypes, setProductTypes] = useState([]);
   const [formData, setFormData] = useState({
     product_name: "",
     price: "",
@@ -20,16 +21,21 @@ function CreateProducts() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    const fetchCategories = async () => {
+    const fetchInitialData = async () => {
       try {
-        const response = await axios.get(getApiUrl("/categories"));
-        setCategories(Array.isArray(response.data?.data) ? response.data.data : []);
+        const [categoriesResponse, productTypesResponse] = await Promise.all([
+          axios.get(getApiUrl("/categories")),
+          axios.get(getApiUrl("/products/types"))
+        ]);
+
+        setCategories(Array.isArray(categoriesResponse.data?.data) ? categoriesResponse.data.data : []);
+        setProductTypes(Array.isArray(productTypesResponse.data?.data) ? productTypesResponse.data.data : []);
       } catch {
-        setError("Không tải được danh mục, vui lòng thử lại");
+        setError("Không tải được dữ liệu danh mục/loại sản phẩm, vui lòng thử lại");
       }
     };
 
-    fetchCategories();
+    fetchInitialData();
   }, []);
 
   const handleChange = (event) => {
@@ -141,16 +147,20 @@ function CreateProducts() {
         </div>
 
         <div className="form-group">
-          <label htmlFor="product_type_id">Product type id (tùy chọn)</label>
-          <input
+          <label htmlFor="product_type_id">Loại sản phẩm (tùy chọn)</label>
+          <select
             id="product_type_id"
             name="product_type_id"
-            type="number"
-            min="1"
             value={formData.product_type_id}
             onChange={handleChange}
-            placeholder="Ví dụ: 1"
-          />
+          >
+            <option value="">Chọn loại sản phẩm</option>
+            {productTypes.map((type) => (
+              <option key={type.id} value={type.id}>
+                {type.type_name}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div className="form-group">
