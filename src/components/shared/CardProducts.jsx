@@ -1,11 +1,10 @@
 import "../../assets/css/product-card.css";
 
-function CardProducts({ product }) {
-	const { image, name, category, price } = product;
+function CardProducts({id, image, name, category, price }) {
 	const formattedPrice = new Intl.NumberFormat("vi-VN").format(price ?? 0);
 
 	return (
-		<article className="product-card">
+		<article className="product-card" data_product-id={id}>
 			<div className="product-card__image-wrap">
 				<img className="product-card__image" src={image} alt={name} loading="lazy" />
 			</div>

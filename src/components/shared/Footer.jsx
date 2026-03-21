@@ -26,7 +26,7 @@ const footerColumns = [
 	{
 		title: "Company",
 		links: [
-			"About Nike",
+			"About Us",
 			"News",
 			"Careers",
 			"Investors",
