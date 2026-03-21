@@ -1,4 +1,3 @@
-import { Outlet } from "react-router-dom";
 import "../assets/css/about.css";
 
 function About() {
@@ -8,7 +7,7 @@ function About() {
       <section className="about-hero">
         <div className="about-hero__content">
           <h1 className="about-hero__title">TheLiemsShoes</h1>
-          <p className="about-hero__subtitle">Chất lượng giày cao cấp, phong cách sống</p>
+          <p className="about-hero__subtitle">Premium footwear, elevated lifestyle</p>
         </div>
       </section>
 
@@ -16,15 +15,15 @@ function About() {
       <section className="about-story">
         <div className="about-container">
           <div className="about-story__content">
-            <h2 className="about-section-title">Câu chuyện của chúng tôi</h2>
+            <h2 className="about-section-title">Our Story</h2>
             <p className="about-text">
-              TheLiemsShoes được thành lập với sứ mệnh mang đến những đôi giày chất lượng cao nhất tới khách hàng Việt Nam. 
-              Chúng tôi tin tưởng rằng một đôi giày tốt không chỉ là phần quan trọng của trang phục, mà còn là cách để bạn 
-              thể hiện cá tính và phong cách riêng.
+              TheLiemsShoes was founded with a mission to bring the highest-quality footwear to customers across Vietnam.
+              We believe that a great pair of shoes is not only an essential part of your outfit, but also a way to express
+              your personality and unique style.
             </p>
             <p className="about-text">
-              Với hơn một thập kỷ kinh nghiệm trong ngành, chúng tôi chỉ lựa chọn những sản phẩm từ các thương hiệu uy tín 
-              thế giới như Nike, Adidas, OFF-WHITE, và nhiều hãng khác để đảm bảo chất lượng tốt nhất cho bạn.
+              With more than a decade of industry experience, we carefully select products from globally trusted brands
+              like Nike, Adidas, OFF-WHITE, and many others to ensure the best quality for you.
             </p>
           </div>
         </div>
@@ -33,34 +32,34 @@ function About() {
       {/* Values Section */}
       <section className="about-values">
         <div className="about-container">
-          <h2 className="about-section-title">Giá trị của chúng tôi</h2>
+          <h2 className="about-section-title">Our Values</h2>
           <div className="about-values__grid">
             <div className="about-value-card">
               <div className="about-value-card__icon">✓</div>
-              <h3 className="about-value-card__title">Chất lượng hàng đầu</h3>
+              <h3 className="about-value-card__title">Top-Tier Quality</h3>
               <p className="about-value-card__description">
-                Tất cả sản phẩm đều được kiểm tra kỹ lưỡng để đảm bảo chất lượng tuyệt vời.
+                Every product is carefully inspected to ensure outstanding quality.
               </p>
             </div>
             <div className="about-value-card">
               <div className="about-value-card__icon">◆</div>
-              <h3 className="about-value-card__title">Phong cách đa dạng</h3>
+              <h3 className="about-value-card__title">Diverse Styles</h3>
               <p className="about-value-card__description">
-                Từ giày thể thao đến giày casual, chúng tôi có mọi phong cách bạn cần.
+                From sports sneakers to casual footwear, we offer every style you need.
               </p>
             </div>
             <div className="about-value-card">
               <div className="about-value-card__icon">★</div>
-              <h3 className="about-value-card__title">Giá cả hợp lý</h3>
+              <h3 className="about-value-card__title">Fair Pricing</h3>
               <p className="about-value-card__description">
-                Chúng tôi cam k承 cung cấp giá tốt nhất mà không ảnh hưởng tới chất lượng.
+                We are committed to offering the best prices without compromising quality.
               </p>
             </div>
             <div className="about-value-card">
               <div className="about-value-card__icon">⚡</div>
-              <h3 className="about-value-card__title">Dịch vụ tận tâm</h3>
+              <h3 className="about-value-card__title">Dedicated Service</h3>
               <p className="about-value-card__description">
-                Đội ngũ hỗ trợ khách hàng của chúng tôi luôn sẵn sàng giúp đỡ 24/7.
+                Our support team is always ready to help you 24/7.
               </p>
             </div>
           </div>
@@ -70,9 +69,9 @@ function About() {
       {/* Brands Section */}
       <section className="about-brands">
         <div className="about-container">
-          <h2 className="about-section-title">Thương hiệu đối tác</h2>
+          <h2 className="about-section-title">Partner Brands</h2>
           <p className="about-brands__subtitle">
-            Chúng tôi tự hào hợp tác với các thương hiệu giày hàng đầu thế giới
+            We are proud to collaborate with the world&apos;s leading footwear brands
           </p>
           <div className="about-brands__grid">
             <div className="about-brand-item">Nike</div>
@@ -88,19 +87,19 @@ function About() {
       {/* Contact Section */}
       <section className="about-contact">
         <div className="about-container">
-          <h2 className="about-section-title">Liên hệ với chúng tôi</h2>
+          <h2 className="about-section-title">Contact Us</h2>
           <div className="about-contact__content">
             <div className="about-contact__info">
-              <h3>Thông tin liên hệ</h3>
-              <p><strong>Địa chỉ:</strong> 123 Đường Lê Lợi, TP. Hồ Chí Minh</p>
+              <h3>Contact Information</h3>
+              <p><strong>Address:</strong> 123 Le Loi Street, Ho Chi Minh City</p>
               <p><strong>Email:</strong> info@theliemsshoes.com</p>
-              <p><strong>Điện thoại:</strong> +84 (0) 123 456 789</p>
-              <p><strong>Giờ mở cửa:</strong> 9:00 - 21:00 (Thứ 2 - Chủ Nhật)</p>
+              <p><strong>Phone:</strong> +84 (0) 123 456 789</p>
+              <p><strong>Business Hours:</strong> 9:00 - 21:00 (Monday - Sunday)</p>
             </div>
             <div className="about-contact__message">
               <p>
-                Cảm ơn bạn đã lựa chọn TheLiemsShoes. Chúng tôi cam kết cung cấp sản phẩm và dịch vụ tốt nhất. 
-                Nếu bạn có bất kỳ câu hỏi nào, vui lòng không ngần ngại liên hệ với chúng tôi!
+                Thank you for choosing TheLiemsShoes. We are committed to providing the best products and service.
+                If you have any questions, please do not hesitate to contact us.
               </p>
             </div>
           </div>
