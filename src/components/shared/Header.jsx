@@ -24,6 +24,8 @@ function Header() {
     navigate("/Login");
   };
 
+
+
   return (
     <header className="site-header">
       <div className="site-header-inner top-row">
@@ -48,7 +50,7 @@ function Header() {
             <FiUser className="header-icon" aria-hidden="true" />
           </button>
           {user?.email && <span className="header-user-email">{user.email}</span>}
-          <button type="button" aria-label="Cart">
+          <button type="button" aria-label="Cart" onClick={() => navigate("/Cart")}>
             <FiShoppingCart className="header-icon" aria-hidden="true" />
           </button>
         </div>

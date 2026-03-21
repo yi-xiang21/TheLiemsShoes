@@ -20,7 +20,7 @@ import CreateCategory from "./pages/admin/CreateCategory.jsx"
 import EditCategory from "./pages/admin/EditCategory.jsx"
 import CreateProducts from "./pages/admin/CreateProducts.jsx"
 import EditProducts from "./pages/admin/EditProducts.jsx"
-
+import Cart from "./pages/Cart.jsx"
 function App() {
   return (
     <AuthProvider>
@@ -31,6 +31,7 @@ function App() {
           <Route path="Login" element={<Login />} />
           <Route path="UserProfile" element={<UserProfile />} />
           <Route path="About" element={<About />} />
+          <Route path="Cart" element={<Cart />} />
             <Route path="Shop" element={<LayoutShopProduct />} >
               <Route index element={<Shop />} />
             </Route>
