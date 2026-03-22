@@ -17,6 +17,12 @@
   height: 100%;
   object-fit: cover;
   display: block;
+  transform: scale(1);
+  transition: transform 1.2s ease;
+}
+
+.type-shoes-card:hover .type-shoes-card__image {
+  transform: scale(1.08);
 }
 
 .type-shoes-card__name {
@@ -25,7 +31,29 @@
   font-size: 28px;
   line-height: 1.2;
   font-weight: 500;
-  color: #101010;
+  letter-spacing: 0.2px;
+  color: #1b2a3a;
+  background: linear-gradient(120deg, #ffd6e8 0%, #ffe7c2 24%, #fff6b3 44%, #cff9d8 64%, #cde9ff 82%, #e4d8ff 100%);
+  background-size: 260% 100%;
+  background-position: 0% 0%;
+  transition: color 0.45s ease, letter-spacing 0.45s ease, font-weight 0.45s ease;
+}
+
+.type-shoes-card:hover .type-shoes-card__name {
+  color: #0f2238;
+  font-weight: 600;
+  letter-spacing: 0.45px;
+  animation: typeShoesNameFlow 4.8s linear infinite;
+}
+
+@keyframes typeShoesNameFlow {
+  from {
+    background-position: 0% 0%;
+  }
+
+  to {
+    background-position: 260% 0%;
+  }
 }
 
 @media (max-width: 768px) {

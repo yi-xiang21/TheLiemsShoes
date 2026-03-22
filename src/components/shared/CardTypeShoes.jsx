@@ -1,7 +1,8 @@
 import "../../assets/css/type-shoes-card.css";
 
-function CardTypeShoes({ item }) {
-	const { image, name } = item;
+function CardTypeShoes({ a, b }) {
+	const image = a ;
+	const name = b;
 
 	return (
 		<article className="type-shoes-card">

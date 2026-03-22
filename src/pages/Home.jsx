@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import CardProducts from "../components/shared/CardProducts.jsx";
 import "../assets/css/home.css";
 import CardCategorys from "../components/shared/CardCategorys.jsx";
 import CardTypeShoes from "../components/shared/CardTypeShoes.jsx";
+import FeaturedProductSlider from "../components/shared/FeaturedProductSlider.jsx";
 import axios from "axios";
 import { getApiUrl } from "../config/config.js";
 import UserLoadingOverlay from "../components/shared/UserLoadingOverlay.jsx";
@@ -14,9 +14,63 @@ import homeBanner2 from "../assets/images/HomeBanner2.jpg";
 import homeBanner3 from "../assets/images/HomeBanner3.jpg";
 import homeBanner4 from "../assets/images/HomeBanner4.jpg";
 import homeBanner5 from "../assets/images/HomeBanner5.jpg";
+import typeImg1 from "../assets/images/Fashion.jpg";
+import typeImg2 from "../assets/images/FootBall.jpg";
+import typeImg3 from "../assets/images/Running.jpg";
+import typeImg4 from "../assets/images/Basketball.jpg";
+import typeImg5 from "../assets/images/Tenis.jpg";
+import typeImg6 from "../assets/images/Skateboarding.jpg";
+import typeImg7 from "../assets/images/Hiking.jpg";
+import typeImg8 from "../assets/images/Casual.jpg";
+import typeImg9 from "../assets/images/Sandals.jpg";
+import typeImg10 from "../assets/images/boots.jpg";
+import { FiTruck, FiLock, FiSmile, FiMessageCircle } from "react-icons/fi";
+
+const typeImages = [
+  typeImg1,
+  typeImg2,
+  typeImg3,
+  typeImg4,
+  typeImg5,
+  typeImg6,
+  typeImg7,
+  typeImg8,
+  typeImg9,
+  typeImg10,
+];
+
+const serviceItems = [
+  {
+    icon: FiTruck,
+    heading: "SHIPPING AND DELIVERY",
+    title: "MAKE YOUR DELIVERY FAST AND EASY WITH US",
+    text: "We provide standard and express reliable shipping services across the country. We deliver same day to NY & Tri-State area.",
+  },
+  {
+    icon: FiLock,
+    heading: "SECURE PAYMENTS",
+    title: "",
+    text: "We prioritize your security. Rest assured, our website offers a secure payment gateway, ensuring your transactions are protected by the latest encryption technology. Shop confidently knowing that your payment information is safe and secure with us.",
+  },
+  {
+    icon: FiSmile,
+    heading: "SATISFIED OR REFUNDED",
+    title: "",
+    text: "We stand by the quality of our products. If for any reason you're not completely satisfied with your purchase, we offer a hassle-free refund policy. Your satisfaction is our priority, and we're committed to ensuring you're delighted with every purchase.",
+  },
+  {
+    icon: FiMessageCircle,
+    heading: "TOP-NOTCH SUPPORT",
+    title: "",
+    text: "We take pride in delivering exceptional customer support. Our dedicated team is here to assist you every step of the way. From answering queries to resolving concerns, we strive to provide prompt, friendly, and knowledgeable assistance to ensure your satisfaction.",
+  },
+];
+
 
 function Home() {
+  const [products, setProducts] = useState([]);
   const [category, setCategory] = useState([]);
+  const [type, setType] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [showHomeVideo, setShowHomeVideo] = useState(false);
@@ -24,24 +78,31 @@ function Home() {
   const homeVideoRef = useRef(null);
   const homeBanners = [homeBanner1, homeBanner2, homeBanner3, homeBanner4, homeBanner5];
 
+
+
   useEffect(() => {
-    const fetchCategory = async () => {
+    const fetchHomeData = async () => {
       try {
-        const res = await axios.get(getApiUrl("/categories"));
+        const [categoriesResponse, typeResponse, productsResponse] = await Promise.all([
+          axios.get(getApiUrl("/categories")),
+          axios.get(getApiUrl("/products/types")),
+          axios.get(getApiUrl("/products")),
+        ]);
 
-        setCategory(res.data.data);
-        console.log(res.data.data);
-
-      } catch {
+        setCategory(Array.isArray(categoriesResponse.data?.data) ? categoriesResponse.data.data : []);
+        setType(Array.isArray(typeResponse.data?.data) ? typeResponse.data.data : []);
+        setProducts(Array.isArray(productsResponse.data?.data) ? productsResponse.data.data : []);
+      } catch (fetchError) {
+        console.error("Không thể tải dữ liệu trang chủ:", fetchError);
         setError(
-          "Không thể tải được danh sách danh mục (kiểm tra link https://be-theliemsshoes.onrender.com có hoạt động không)",
+          "Không thể tải dữ liệu trang chủ (kiểm tra link https://be-theliemsshoes.onrender.com có hoạt động không)",
         );
       } finally {
         setLoading(false);
       }
     };
 
-    fetchCategory();
+    fetchHomeData();
   }, []);
 
   useEffect(() => {
@@ -110,42 +171,50 @@ function Home() {
         <p className="homeBannerSubtitle">Discover the latest trends in footwear</p>
       </div>
       <div className="homeCollection">
-        <p className="title">News Collections</p>
-        <div className="collectionItems">
-          {/* {products.map((product) => (
-            <CardProducts
-              key={product.id}
-              product={product}
-            />
-          ))} */}
+        <p className="title">New Collection</p>
+          // Dành chỗ cho san pham
+      </div>
+      <div>
+        <p className="title">Sport In Life</p>
+        <div
+          ref={homeVideoRef}
+          className={`HomeVideo ${showHomeVideo ? "HomeVideo--visible" : ""}`}>
+          
+          <div className="homeVideoLeft homeVideoRevealLeft">
+            <video autoPlay muted loop playsInline>
+              <source src={homeVideo1} type="video/mp4" />
+            </video>
+          </div>
+          <div className="homeVideoRight">
+            <div className="homeVideoTop homeVideoRevealRight homeVideoDelayOne">
+              <video autoPlay muted loop playsInline>
+                <source src={homeVideo3} type="video/mp4" />
+              </video>
+            </div>
+            <div className="homeVideoBottom homeVideoRevealRight homeVideoDelayTwo">
+              <video autoPlay muted loop playsInline>
+                <source src={homeVideo2} type="video/mp4" />
+              </video>
+            </div>
+          </div>
         </div>
       </div>
-      <div
-        ref={homeVideoRef}
-        className={`HomeVideo ${showHomeVideo ? "HomeVideo--visible" : ""}`}
-      >
-        <div className="homeVideoLeft homeVideoRevealLeft">
-          <video autoPlay muted loop playsInline>
-            <source src={homeVideo1} type="video/mp4" />
-          </video>
-        </div>
-        <div className="homeVideoRight">
-          <div className="homeVideoTop homeVideoRevealRight homeVideoDelayOne">
-            <video autoPlay muted loop playsInline>
-              <source src={homeVideo3} type="video/mp4" />
-            </video>
-          </div>
-          <div className="homeVideoBottom homeVideoRevealRight homeVideoDelayTwo">
-            <video autoPlay muted loop playsInline>
-              <source src={homeVideo2} type="video/mp4" />
-            </video>
-          </div>
+      <div className="homeCollection">
+        <p className="title">Top Sells</p>
+        <div className="featuredProductsWrap">
+          <FeaturedProductSlider products={products} />
         </div>
       </div>
       <div className="homeCollection">
         <p className="title">Shop by Sport</p>
         <div className="collectionTypes">
-          
+          {type.map((item,index) => (
+            <CardTypeShoes
+              key={item.id ?? `${item.type_name}-${index}`}
+              a={typeImages[index]}
+              b={item.type_name}
+            />
+          ))}
         </div>
       </div>  
       <div className="homeCategory">
@@ -153,10 +222,29 @@ function Home() {
         <div className="categoryItems">
           {category.map((item) => (
             <CardCategorys
+              key={item.id}
               id={item.id}
               name={item.category_name}
             />
           ))}
+        </div>
+      </div>
+      <div className="homeServices">
+        <div className="serviceItems">
+          {serviceItems.map((item, index) => {
+            const IconComponent = item.icon;
+
+            return (
+              <article className="serviceCard" key={index}>
+                <div className="serviceIconWrap">
+                  <IconComponent className="serviceIcon" />
+                </div>
+                <h4 className="serviceHeading">{item.heading}</h4>
+                {item.title ? <h3 className="serviceTitle">{item.title}</h3> : null}
+                <p className="serviceText">{item.text}</p>
+              </article>
+            );
+          })}
         </div>
       </div>
     </div>

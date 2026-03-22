@@ -117,6 +117,11 @@
     background: #7f7f7f;
 }
 
+.featuredProductsWrap {
+    width: min(100%, 1520px);
+    margin-top: 20px;
+}
+
 .collectionTypes{
     display: flex;
     justify-content: flex-start;
@@ -184,6 +189,61 @@
     margin-top: 20px;
     width: 100%;
     padding: 8px 8px 14px;
+}
+
+.homeServices {
+    margin-top: 48px;
+    background: #efefef;
+    padding: 48px 24px;
+}
+
+.serviceItems {
+    width: min(100%, 1400px);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 32px;
+}
+
+.serviceCard {
+    text-align: center;
+    color: #111;
+}
+
+.serviceIconWrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.serviceIcon {
+    font-size: 44px;
+    stroke-width: 1.6;
+}
+
+.serviceHeading {
+    margin: 0;
+    font-size: 20px;
+    font-family: "Times New Roman", Times, serif;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.serviceTitle {
+    margin: 20px 0 22px;
+    font-size: 22px;
+    font-weight: 400;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    line-height: 1.3;
+}
+
+.serviceText {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.55;
+    font-weight: 400;
 }
 
 .HomeVideo {
@@ -289,5 +349,44 @@
     .homeVideoTop,
     .homeVideoBottom {
         min-height: 220px;
+    }
+
+    .serviceItems {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 26px;
+    }
+
+    .serviceHeading {
+        font-size: 18px;
+    }
+
+    .serviceTitle {
+        font-size: 20px;
+    }
+
+    .serviceText {
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 640px) {
+    .homeServices {
+        padding: 36px 16px;
+    }
+
+    .serviceItems {
+        grid-template-columns: 1fr;
+    }
+
+    .serviceHeading {
+        font-size: 17px;
+    }
+
+    .serviceTitle {
+        font-size: 18px;
+    }
+
+    .serviceText {
+        font-size: 15px;
     }
 }
