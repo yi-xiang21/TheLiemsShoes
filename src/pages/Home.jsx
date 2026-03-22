@@ -23,7 +23,7 @@ import typeImg6 from "../assets/images/Skateboarding.jpg";
 import typeImg7 from "../assets/images/Hiking.jpg";
 import typeImg8 from "../assets/images/Casual.jpg";
 import typeImg9 from "../assets/images/Sandals.jpg";
-import typeImg10 from "../assets/images/boots.jpg";
+import typeImg10 from "../assets/images/Boots.jpg";
 import { FiTruck, FiLock, FiSmile, FiMessageCircle } from "react-icons/fi";
 
 const typeImages = [
