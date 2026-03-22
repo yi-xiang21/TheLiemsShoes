@@ -25,6 +25,7 @@ import typeImg8 from "../assets/images/Casual.jpg";
 import typeImg9 from "../assets/images/Sandals.jpg";
 import typeImg10 from "../assets/images/Boots.jpg";
 import { FiTruck, FiLock, FiSmile, FiMessageCircle } from "react-icons/fi";
+import CardProducts from "../components/shared/CardProducts.jsx";
 
 const typeImages = [
   typeImg1,
@@ -155,6 +156,7 @@ function Home() {
     return <div className="homePageContent">{error}</div>;
   }
 
+ 
   return (
     <div className="homePageContent">
       <div className="homeBanner">
@@ -172,7 +174,25 @@ function Home() {
       </div>
       <div className="homeCollection">
         <p className="title">New Collection</p>
-          // Dành chỗ cho san pham
+        <div className="collectionItems">
+          {products.map((product) => {
+            const imagePath = product.images?.[0]?.image_url || "";
+            const imageUrl = imagePath
+              ? (imagePath.startsWith("http") ? imagePath : getApiUrl(imagePath))
+              : "https://via.placeholder.com/300x220?text=No+Image";
+
+            return (
+              <CardProducts
+                key={product.id}
+                id={product.id}
+                image={imageUrl}
+                name={product.product_name}
+                category={product.category_name}
+                price={product.price}
+              />
+            );
+          })}
+        </div>
       </div>
       <div>
         <p className="title">Sport In Life</p>
