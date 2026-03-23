@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import axios from 'axios';
 import { AuthContext } from './useAuth.js';
 
 export function AuthProvider({ children }) {
@@ -26,6 +27,12 @@ export function AuthProvider({ children }) {
 
   // Fetch user profile when token changes
   useEffect(() => {
+    if (token) {
+      axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+    } else {
+      delete axios.defaults.headers.common.Authorization;
+    }
+
     if (!token) {
       setUser(null);
       return;
