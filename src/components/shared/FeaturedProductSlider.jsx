@@ -85,7 +85,7 @@ function FeaturedProductSlider({ products }) {
               >
                 <h3 className="featuredProductSlider__name">{slide.name}</h3>
                 <p className="featuredProductSlider__price">${slide.price.toFixed(2)}</p>
-                <a className="featuredProductSlider__button" href="/shop">
+                <a className="featuredProductSlider__button" href={`/product/${slide.id}`}>
                   View product
                 </a>
               </article>
