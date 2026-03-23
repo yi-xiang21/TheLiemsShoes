@@ -76,6 +76,7 @@ function FeaturedProductSlider({ products }) {
         <div className="featuredProductSlider__infoTrack">
           {slides.map((slide, index) => {
             const translateY = (index - safeIndex) * 100;
+            const formattedPrice = new Intl.NumberFormat("vi-VN").format(slide.price ?? 0);
 
             return (
               <article
@@ -83,8 +84,8 @@ function FeaturedProductSlider({ products }) {
                 key={`${slide.id}-info-${index}`}
                 style={{ transform: `translateY(${translateY}%)` }}
               >
-                <h3 className="featuredProductSlider__name">{slide.name}</h3>
-                <p className="featuredProductSlider__price">${slide.price.toFixed(2)}</p>
+                <h3 className="featuredProductSlider__name" >{slide.name}</h3>
+                <p className="featuredProductSlider__price">{formattedPrice}đ</p>
                 <a className="featuredProductSlider__button" href={`/product/${slide.id}`}>
                   View product
                 </a>

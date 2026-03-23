@@ -1,8 +1,9 @@
-import { useNavigate, useParams } from "react-router-dom";
+import {  useParams } from "react-router-dom";
 import "../assets/css/detail.css";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { getApiUrl } from "../config/config";
+import CardProducts from "../components/shared/CardProducts";
 
 const sizeOptions = [
   "35",
@@ -26,6 +27,7 @@ function Detail() {
   const [error, setError] = useState("");
   const [currentImg, setCurrentImg] = useState(0);
   const [selectedSize, setSelectedSize] = useState(null);
+  const [relatedProducts, setRelatedProducts] = useState([]);
 
   const handleCurrentImg = (index) => {
     setCurrentImg(index);
@@ -34,8 +36,18 @@ function Detail() {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const res = await axios.get(getApiUrl(`/products/${id}`));
-        setProduct(res.data.data);
+        const [productRes, productsRes] = await Promise.all([
+          axios.get(getApiUrl(`/products/${id}`)),
+          axios.get(getApiUrl("/products")),
+        ]);
+
+        const currentProduct = productRes.data?.data;
+        const products = Array.isArray(productsRes.data?.data) ? productsRes.data.data : [];
+
+        setProduct(currentProduct);
+
+        const filteredProducts = products.filter((item) => item.id !== currentProduct?.id);
+        setRelatedProducts(filteredProducts.slice(0, 8));
       } catch (err) {
         console.error("Error fetching product:", err);
         setError("Không thể tải chi tiết sản phẩm.");
@@ -110,7 +122,7 @@ function Detail() {
             </div>
 
             <div className="detailSizeGrid">
-              {sizeOptions.map((size, index) => (
+              {sizeOptions.map((size) => (
                 <button
                   key={size}
                   className={`detailSizeButton ${selectedSize === size ? "isSelected" : ""}`}
@@ -135,6 +147,30 @@ function Detail() {
           </div>
         </div>
       </div>
+
+      <div className="detailRelatedSection">
+        <h2 className="detailRelatedTitle">Related List</h2>
+        <div className="detailRelatedList">
+          {relatedProducts.map((relatedProduct) => {
+            const imagePath = relatedProduct.images?.[0]?.image_url || "";
+            const imageUrl = imagePath
+              ? (imagePath.startsWith("http") ? imagePath : getApiUrl(imagePath))
+              : "https://via.placeholder.com/300x220?text=No+Image";
+
+            return (
+              <CardProducts
+                key={relatedProduct.id}
+                id={relatedProduct.id}
+                image={imageUrl}
+                name={relatedProduct.product_name}
+                category={relatedProduct.category_name}
+                price={relatedProduct.price}
+              />
+            );
+          })}
+        </div>
+      </div>
+
     </section>
   );
 }
