@@ -3,10 +3,14 @@ import { useEffect, useState } from "react";
 import CardProducts from "../components/shared/CardProducts.jsx";
 import axios from "axios";
 import { getApiUrl } from "../config/config.js";
+import { useSearchParams } from "react-router-dom";
 
 
 
 function Shop() {
+    const [serachParams] = useSearchParams();
+    const categoryId = serachParams.get("categoryId");
+    
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
@@ -14,7 +18,10 @@ function Shop() {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const res = await axios.get(getApiUrl("/products"));
+                const endpoint = categoryId
+                    ? getApiUrl(`/categories/category/${categoryId}`)
+                    : getApiUrl("/products");
+                const res = await axios.get(endpoint);
 
                 setProducts(res.data.data);
                 console.log(res.data.data);
@@ -28,7 +35,7 @@ function Shop() {
         };
 
         fetchProducts();
-    }, []);
+    }, [categoryId]);
 
     if (loading) {
         return <div className="shop-container">Đang tải sản phẩm...</div>;
