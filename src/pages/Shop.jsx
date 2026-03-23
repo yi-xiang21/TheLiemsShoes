@@ -10,6 +10,7 @@ import { useSearchParams } from "react-router-dom";
 function Shop() {
     const [serachParams] = useSearchParams();
     const categoryId = serachParams.get("categoryId");
+    const typeId = serachParams.get("typeId");
     
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -18,7 +19,9 @@ function Shop() {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const endpoint = categoryId
+                const endpoint = typeId
+                    ? getApiUrl(`/products/type/${typeId}`)
+                    : categoryId
                     ? getApiUrl(`/categories/category/${categoryId}`)
                     : getApiUrl("/products");
                 const res = await axios.get(endpoint);
@@ -35,7 +38,7 @@ function Shop() {
         };
 
         fetchProducts();
-    }, [categoryId]);
+    }, [categoryId, typeId]);
 
     if (loading) {
         return <div className="shop-container">Đang tải sản phẩm...</div>;

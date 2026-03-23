@@ -231,6 +231,7 @@ function Home() {
           {type.map((item,index) => (
             <CardTypeShoes
               key={item.id ?? `${item.type_name}-${index}`}
+              id={item.id}
               a={typeImages[index]}
               b={item.type_name}
             />
