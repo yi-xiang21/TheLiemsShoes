@@ -1,10 +1,15 @@
+import { useNavigate } from "react-router-dom";
 import "../../assets/css/product-card.css";
 
 function CardProducts({id, image, name, category, price }) {
+	const navigate = useNavigate();
+	const handleCardClick = () => {
+		navigate(`/product/${id}`);
+	};
 	const formattedPrice = new Intl.NumberFormat("vi-VN").format(price ?? 0);
 
 	return (
-		<article className="product-card" data_product-id={id}>
+		<article className="product-card" data_product-id={id} onClick={handleCardClick} style={{cursor: "pointer"}}>
 			<div className="product-card__image-wrap">
 				<img className="product-card__image" src={image} alt={name} loading="lazy" />
 			</div>
