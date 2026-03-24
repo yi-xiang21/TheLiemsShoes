@@ -71,6 +71,36 @@ function Detail() {
     product.price ?? 0,
   );
 
+  const handleAddToCart = () => {
+    if (!selectedSize) {
+      alert("Vui lòng chọn size trước khi thêm vào giỏ hàng!");
+      return;
+    }
+
+    const cartItem = {
+      id: `${product.id}-${selectedSize.size_id}`,
+      productId: product.id,
+      name: product.product_name,
+      price: Number(product.price), 
+      quantity: 1,
+      image: galleryImages[0] || "",
+      size: selectedSize.size_name,
+      size_id: selectedSize.size_id
+    };
+
+    const existingCart = JSON.parse(localStorage.getItem('cartItems')) || [];
+    
+    const existingItemIndex = existingCart.findIndex(item => item.id === cartItem.id);
+    if (existingItemIndex >= 0) {
+      existingCart[existingItemIndex].quantity += 1;
+    } else {
+      existingCart.push(cartItem);
+    }
+
+    localStorage.setItem('cartItems', JSON.stringify(existingCart));
+    alert("Đã thêm sản phẩm vào giỏ hàng thành công!");
+  };
+
   return (
     <section className="detailPage">
       <div className="detailShell">
@@ -122,7 +152,7 @@ function Detail() {
           </div>
 
           <div className="detailActionStack">
-            <button className="detailPrimaryBtn" type="button">
+            <button className="detailPrimaryBtn" type="button" onClick={handleAddToCart}>
               Add to Bag
             </button>
           </div>

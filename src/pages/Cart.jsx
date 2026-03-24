@@ -1,55 +1,27 @@
 import "../assets/css/cart.css";
 import ItemsCart from "../components/shared/ItemsCart.jsx";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 function Cart() {
   const navigate = useNavigate();
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      name: "Nike Air Force 1 Low",
-      price: "2.350.000 ₫",
-      quantity: 1,
-      image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=240&q=80"
-    },
-    {
-      id: 2,
-      name: "Adidas Campus 00s",
-      price: "2.150.000 ₫",
-      quantity: 2,
-      image: "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&w=240&q=80"
-    },
-    {
-      id: 2,
-      name: "Adidas Campus 00s",
-      price: "2.150.000 ₫",
-      quantity: 2,
-      image: "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&w=240&q=80"
-    },
-    {
-      id: 2,
-      name: "Adidas Campus 00s",
-      price: "2.150.000 ₫",
-      quantity: 2,
-      image: "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&w=240&q=80"
-    },
-    {
-      id: 2,
-      name: "Adidas Campus 00s",
-      price: "2.150.000 ₫",
-      quantity: 2,
-      image: "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&w=240&q=80"
-    }
-  ]);
+  const [cartItems, setCartItems] = useState(() => {
+    const savedCart = localStorage.getItem("cartItems");
+    return savedCart ? JSON.parse(savedCart) : [];
+  });
 
-  const parsePriceToNumber = (price) => {
-    const numberString = String(price).replace(/[^\d]/g, "");
-    return Number(numberString) || 0;
-  };
+  useEffect(() => {
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+  }, [cartItems]);
 
   const formatCurrencyVND = (value) => {
     return new Intl.NumberFormat("vi-VN").format(value) + " ₫";
+  };
+
+  const parsePriceToNumber = (price) => {
+    if (typeof price === "number") return price;
+    const numberString = String(price).replace(/[^\d]/g, "");
+    return Number(numberString) || 0;
   };
 
   const totalPrice = cartItems.reduce((sum, item) => {
