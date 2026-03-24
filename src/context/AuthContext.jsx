@@ -1,6 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { AuthContext } from './useAuth.js';
+
+const AUTH_STORAGE_KEYS = ['token', 'id', 'role'];
+
+function clearAuthStorage() {
+  AUTH_STORAGE_KEYS.forEach((key) => localStorage.removeItem(key));
+}
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
@@ -8,22 +14,21 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(false);
 
   // Update token state when it changes
-  const login = (newToken, userId, role) => {
+  const login = useCallback((newToken, userId, role) => {
     setToken(newToken);
     localStorage.setItem('token', newToken);
     localStorage.setItem('id', userId);
     localStorage.setItem('role', role);
     setUser({ id: userId, role });
-  };
+  }, []);
 
   // Clear user data on logout
-  const logout = () => {
+  const logout = useCallback(() => {
     setToken(null);
     setUser(null);
-    localStorage.removeItem('token');
-    localStorage.removeItem('id');
-    localStorage.removeItem('role');
-  };
+    clearAuthStorage();
+    delete axios.defaults.headers.common.Authorization;
+  }, []);
 
   // Fetch user profile when token changes
   useEffect(() => {
@@ -54,9 +59,7 @@ export function AuthProvider({ children }) {
           const data = await response.json();
           setUser(data.user);
         } else {
-          setUser(null);
-          setToken(null);
-          localStorage.removeItem('token');
+          logout();
         }
       } catch (error) {
         console.error('Failed to fetch profile:', error);
@@ -67,7 +70,7 @@ export function AuthProvider({ children }) {
     };
 
     fetchProfile();
-  }, [token]);
+  }, [token, logout]);
 
   return (
     <AuthContext.Provider value={{ user, token, login, logout, loading }}>
