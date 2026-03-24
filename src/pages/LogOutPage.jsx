@@ -23,13 +23,14 @@ function LogOut() {
                 }
             }
         };
+        const handleLogout = async () => {
+             await callLogoutApi();
+             logout();
+             window.location.href = "/";
+        };
+        handleLogout();
 
-        // Call logout API then clear tokens and redirect
-        callLogoutApi().finally(() => {
-            logout();
-            window.location.href = "/";
-        });
-    }, [token, logout]);
+    }, []);
 
     return null;
 }
