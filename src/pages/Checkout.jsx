@@ -49,7 +49,7 @@ function Checkout() {
     if (!form.email.trim()) {
       newErrors.email = "Please enter your email";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
-      newErrors.email = "Invalid email format";
+      newErrors.email = "Incorrect email format (abc + @gmail.com)";
     }
 
     setErrors(newErrors);
@@ -71,7 +71,7 @@ function Checkout() {
       <div className="checkout-left">
         <h2>Recipient Information</h2>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} noValidate>
           <div className="form-group">
             <input
               type="text"
