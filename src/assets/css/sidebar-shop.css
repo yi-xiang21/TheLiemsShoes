@@ -32,13 +32,18 @@
   z-index: 0;
 }
 
-.sidebar-shop-item:hover::after {
+.sidebar-shop-item:hover::after,
+.sidebar-shop-item.active::after {
   opacity: 1;
+}
+
+.sidebar-shop-item:hover,
+.sidebar-shop-item.active {
+  box-shadow: 0 8px 20px rgba(30, 64, 175, 0.14);
 }
 
 .sidebar-shop-item:hover {
   animation: sidebarItemBounce 0.35s ease;
-  box-shadow: 0 8px 20px rgba(30, 64, 175, 0.14);
 }
 
 .sidebar-shop-item > * {
@@ -76,7 +81,8 @@ button.sidebar-shop-item {
   border-right: none;
 }
 
-.sidebar-shop-item:hover .sidebar-shop-item__title {
+.sidebar-shop-item:hover .sidebar-shop-item__title,
+.sidebar-shop-item.active .sidebar-shop-item__title {
   color: #1d4ed8;
 }
 

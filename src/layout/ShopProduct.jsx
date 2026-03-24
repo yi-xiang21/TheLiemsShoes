@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
-import Header from "../components/shared/Header.jsx";
-import Footer from "../components/shared/Footer.jsx";
 import SideBarShop from "../components/shared/SideBarShop.jsx";
 import UserLoadingOverlay from "../components/shared/UserLoadingOverlay.jsx";
 import { getApiUrl } from "../config/config.js";
@@ -12,6 +10,10 @@ function Shop() {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const currentCategoryId = searchParams.get("categoryId");
 
   useEffect(() => {
     // Fetch categories from API
@@ -30,6 +32,13 @@ function Shop() {
 
     fetchCategories();
   }, []);
+  const handleCategoryClick = (categoryId) => {
+    if(categoryId === null){
+      navigate("/Shop");
+    } else{
+      navigate(`?categoryId=${categoryId}`);
+    }
+  };
 
   if (loading) {
     return <UserLoadingOverlay show={loading} text="Đang tải dữ liệu cửa hàng..." />;
@@ -39,6 +48,8 @@ function Shop() {
     return <div className="shop-container">{error}</div>;
   }
 
+  
+
   return (
     <>
       <div className="shop-container">
@@ -46,17 +57,25 @@ function Shop() {
         <aside className="shop-sidebar">
           <p className="shop-sidebar__tagline">Premium footwear</p>
           <div className="sidebar-scroll">
-            <a style={{ textDecoration: "none" }} href="/#">
+             <SideBarShop
+              title="All Products"
+              isActive={!currentCategoryId}
+              onClick={()=>handleCategoryClick(null)}
+            />
               {categories && categories.length > 0 ? (
                 categories.map((category) => (
-                  <SideBarShop key={category.id} title={category.category_name} />
+                  <SideBarShop 
+                  key={category.id} 
+                  title={category.category_name}
+                  isActive={currentCategoryId === String(category.id)}
+                  onClick={()=>handleCategoryClick(category.id)}
+                  />
                 ))
               ) : (
                 <div style={{ padding: "16px", color: "#999" }}>
                   No categories available
                 </div>
               )}
-            </a>
           </div>
         </aside>
 
