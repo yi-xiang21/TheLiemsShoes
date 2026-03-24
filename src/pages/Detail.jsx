@@ -4,21 +4,8 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { getApiUrl } from "../config/config";
 import CardProducts from "../components/shared/CardProducts";
+import CardSize from "../components/shared/CardSize";
 
-const sizeOptions = [
-  "35",
-  "36",
-  "37",
-  "38",
-  "39",
-  "40",
-  "41",
-  "42",
-  "43",
-  "44",
-  "45",
-  "46",
-];
 
 function Detail() {
   const { id } = useParams();
@@ -122,15 +109,14 @@ function Detail() {
             </div>
 
             <div className="detailSizeGrid">
-              {sizeOptions.map((size) => (
-                <button
-                  key={size}
-                  className={`detailSizeButton ${selectedSize === size ? "isSelected" : ""}`}
-                  type="button"
+              {product.sizes?.map((size) => (
+                <CardSize
+                  id={size.size_id}
+                  key={size.product_size_id}
+                  size={size.size_name}
+                  isSelected={selectedSize?.product_size_id === size.product_size_id}
                   onClick={() => setSelectedSize(size)}
-                >
-                  {size}
-                </button>
+                />
               ))}
             </div>
           </div>
