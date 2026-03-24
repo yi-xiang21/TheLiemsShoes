@@ -12,9 +12,9 @@ function CreateProducts() {
     price: "",
     description: "",
     category_id: "",
-    product_type_id: "",
-    stock_quantity: "0"
+    product_type_id: ""
   });
+  const [sizeStocks, setSizeStocks] = useState([{ size_name: "", stock_quantity: "0" }]);
   const [images, setImages] = useState([]);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -50,6 +50,28 @@ function CreateProducts() {
     setImages(Array.from(event.target.files || []));
   };
 
+  const handleSizeStockChange = (index, field, value) => {
+    setSizeStocks((prev) =>
+      prev.map((item, currentIndex) =>
+        currentIndex === index ? { ...item, [field]: value } : item
+      )
+    );
+  };
+
+  const addSizeStockRow = () => {
+    setSizeStocks((prev) => [...prev, { size_name: "", stock_quantity: "0" }]);
+  };
+
+  const removeSizeStockRow = (index) => {
+    setSizeStocks((prev) => {
+      if (prev.length <= 1) {
+        return [{ size_name: "", stock_quantity: "0" }];
+      }
+
+      return prev.filter((_, currentIndex) => currentIndex !== index);
+    });
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     setError("");
@@ -60,6 +82,38 @@ function CreateProducts() {
       return;
     }
 
+    const normalizedSizeStocks = sizeStocks
+      .map((item) => ({
+        size_name: String(item.size_name || "").trim(),
+        stock_quantity: Number(item.stock_quantity)
+      }))
+      .filter((item) => item.size_name);
+
+    if (!normalizedSizeStocks.length) {
+      setError("Vui lòng thêm ít nhất 1 size hợp lệ");
+      return;
+    }
+
+    if (normalizedSizeStocks.some((item) => !Number.isInteger(item.stock_quantity) || item.stock_quantity < 0)) {
+      setError("Số lượng tồn từng size phải là số nguyên không âm");
+      return;
+    }
+
+    const duplicateSizeName = normalizedSizeStocks.find(
+      (item, index) =>
+        normalizedSizeStocks.findIndex((candidate) => candidate.size_name.toLowerCase() === item.size_name.toLowerCase()) !== index
+    );
+
+    if (duplicateSizeName) {
+      setError("Size bị trùng, vui lòng kiểm tra lại");
+      return;
+    }
+
+    const totalStockQuantity = normalizedSizeStocks.reduce(
+      (sum, item) => sum + item.stock_quantity,
+      0
+    );
+
     try {
       setIsSubmitting(true);
       const body = new FormData();
@@ -67,7 +121,8 @@ function CreateProducts() {
       body.append("price", formData.price);
       body.append("description", formData.description.trim());
       body.append("category_id", formData.category_id);
-      body.append("stock_quantity", formData.stock_quantity || "0");
+      body.append("stock_quantity", String(totalStockQuantity));
+      body.append("size_stocks", JSON.stringify(normalizedSizeStocks));
 
       if (formData.product_type_id) {
         body.append("product_type_id", formData.product_type_id);
@@ -163,16 +218,48 @@ function CreateProducts() {
           </select>
         </div>
 
-        <div className="form-group">
-          <label htmlFor="stock_quantity">Số lượng tồn</label>
-          <input
-            id="stock_quantity"
-            name="stock_quantity"
-            type="number"
-            min="0"
-            value={formData.stock_quantity}
-            onChange={handleChange}
-          />
+        <div className="form-group form-group-full">
+          <label>Size và số lượng tồn</label>
+          {sizeStocks.map((item, index) => (
+            <div
+              key={`size-stock-${index}`}
+              style={{ display: "grid", gridTemplateColumns: "1fr 1fr auto", gap: "8px", marginBottom: "8px" }}
+            >
+              <input
+                type="text"
+                value={item.size_name}
+                onChange={(event) => handleSizeStockChange(index, "size_name", event.target.value)}
+                placeholder="VD: 39, 40, 41"
+              />
+              <input
+                type="number"
+                min="0"
+                step="1"
+                value={item.stock_quantity}
+                onChange={(event) => handleSizeStockChange(index, "stock_quantity", event.target.value)}
+                placeholder="Số lượng"
+              />
+              <button
+                type="button"
+                className="button button-secondary"
+                onClick={() => removeSizeStockRow(index)}
+                disabled={isSubmitting}
+              >
+                Xóa
+              </button>
+            </div>
+          ))}
+          <button
+            type="button"
+            className="button button-secondary"
+            onClick={addSizeStockRow}
+            disabled={isSubmitting}
+          >
+            + Thêm size
+          </button>
+          <small className="admin-form-hint">
+            Tổng tồn kho: {sizeStocks.reduce((sum, item) => sum + Math.max(0, Number(item.stock_quantity) || 0), 0)}
+          </small>
         </div>
 
         <div className="form-group form-group-full">
