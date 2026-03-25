@@ -1,17 +1,60 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "../assets/css/checkout.css";
+import axios from "axios";
+import { getApiUrl } from "../config/config";
+import { useAuth } from "../context/useAuth";
 
 function Checkout() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { token } = useAuth();
 
-  const cartItems = location.state?.cartItems || [];
+  const [cartItems, setCartItems] = useState(location.state?.cartItems || []);
+
+  const formatCurrencyVND = (value) => {
+    return new Intl.NumberFormat("vi-VN").format(value) + " ₫";
+  };
+
+  const getItemPriceNumber = (item) => {
+    if (typeof item?.priceNumber === "number") return item.priceNumber;
+    if (typeof item?.price === "number") return item.price;
+    const numberString = String(item?.price || "").replace(/[^\d]/g, "");
+    return Number(numberString) || 0;
+  };
 
   const total = cartItems.reduce((sum, item) => {
-    const price = parseInt(item.price.replace(/\D/g, ""));
-    return sum + price * item.quantity;
+    return sum + getItemPriceNumber(item) * (Number(item.quantity) || 0);
   }, 0);
+
+  useEffect(() => {
+    const fetchCartForCheckout = async () => {
+      if (!token) return;
+      if (location.state?.cartItems?.length) return;
+
+      try {
+        const res = await axios.get(getApiUrl("/cart"), {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const items = Array.isArray(res.data?.cartItems) ? res.data.cartItems : [];
+        const mapped = items.map((apiItem) => {
+          const priceNumber = Number(apiItem?.price) || 0;
+          return {
+            id: apiItem?.cart_item_id,
+            name: apiItem?.product_name,
+            quantity: Number(apiItem?.quantity) || 1,
+            priceNumber,
+            price: formatCurrencyVND(priceNumber),
+          };
+        });
+        setCartItems(mapped);
+      } catch (err) {
+        console.error("Error fetching cart for checkout:", err);
+      }
+    };
+
+    fetchCartForCheckout();
+  }, [token, location.state]);
 
   const [form, setForm] = useState({
     name: "",
@@ -126,7 +169,7 @@ function Checkout() {
           </div>
 
           <div className="button-group">
-            <button type="button" onClick={() => navigate("/cart")}>
+            <button type="button" onClick={() => navigate("/Cart")}>
               Back to Cart
             </button>
 
