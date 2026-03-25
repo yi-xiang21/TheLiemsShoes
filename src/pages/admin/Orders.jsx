@@ -1,46 +1,31 @@
-import { useState } from "react";
-// import axios from "axios";
-// import { getApiUrl } from "../../config/config.js";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { getApiUrl } from "../../config/config.js";
 
 function Orders() {
-  // Demo data for UI visualization
-  const [orders] = useState([
-    {
-      id: 1,
-      user_id: 101,
-      user_name: "Nguyễn Văn A",
-      total_amount: 1500000,
-      status: "pending",
-      created_at: "2023-10-25T08:30:00Z"
-    },
-    {
-      id: 2,
-      user_id: 102,
-      user_name: "Trần Thị B",
-      total_amount: 250000,
-      status: "completed",
-      created_at: "2023-10-24T14:15:00Z"
-    },
-    {
-      id: 3,
-      user_id: 103,
-      user_name: "Lê Văn C",
-      total_amount: 890000,
-      status: "cancelled",
-      created_at: "2023-10-23T09:00:00Z"
-    },
-    {
-      id: 4,
-      user_id: 104,
-      user_name: "Phạm Thị D",
-      total_amount: 3200000,
-      status: "shipping",
-      created_at: "2023-10-22T16:45:00Z"
-    }
-  ]);
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const loading = false;
-  const error = "";
+  const fetchOrders = async () => {
+    try {
+      setLoading(true);
+      setError("");
+      const response = await axios.get(getApiUrl("/orders"));
+      // Backend returns { data: [...] }
+      const data = response.data?.data || [];
+      setOrders(Array.isArray(data) ? data : []);
+    } catch (err) {
+      console.error("Error fetching orders:", err);
+      setError(err.response?.data?.message || "Không thể tải danh sách đơn hàng");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchOrders();
+  }, []);
 
   const columns = [
     { field: "id", label: "Mã Đơn" },
@@ -50,12 +35,29 @@ function Orders() {
     { field: "created_at", label: "Ngày Tạo" }
   ];
 
-  const handleUpdateStatus = (orderId) => {
-    alert(`(Demo) Đổi trạng thái đơn hàng #${orderId}`);
+  const handleUpdateStatus = async (orderId) => {
+    const newStatus = window.prompt("Nhập trạng thái mới (pending, shipping, completed, cancelled):");
+    if (!newStatus) return;
+
+    const validStatuses = ['pending', 'shipping', 'completed', 'cancelled'];
+    if (!validStatuses.includes(newStatus.toLowerCase())) {
+        alert("Trạng thái không hợp lệ! Vui lòng nhập: pending, shipping, completed, hoặc cancelled.");
+        return;
+    }
+
+    try {
+        await axios.put(getApiUrl(`/orders/${orderId}/status`), { status: newStatus.toLowerCase() });
+        alert("Cập nhật trạng thái thành công!");
+        fetchOrders(); // Reload list
+    } catch (err) {
+        console.error("Update status error:", err);
+        alert("Lỗi cập nhật trạng thái: " + (err.response?.data?.message || err.message));
+    }
   };
 
   const handleViewOrder = (orderId) => {
-    alert(`(Demo) Xem chi tiết đơn hàng #${orderId}`);
+    // Nếu có trang chi tiết thì navigate, tạm thời alert
+    alert(`Chức năng xem chi tiết đơn hàng #${orderId} đang phát triển`);
   };
 
   const formatCellValue = (field, value) => {
@@ -79,6 +81,7 @@ function Orders() {
   };
 
   const getStatusColor = (status) => {
+    status = (status || '').toLowerCase();
     switch (status) {
       case 'completed': return '#28a745'; // Green
       case 'pending': return '#ffc107';   // Yellow
@@ -92,7 +95,7 @@ function Orders() {
     <section className="admin-card">
       <div className="admin-card-header">
         <h2>Quản Lý Đơn Hàng</h2>
-        <button className="button button-action" style={{ marginLeft: "auto" }} onClick={() => alert("Làm mới dữ liệu")}>
+        <button className="button button-action" style={{ marginLeft: "auto" }} onClick={fetchOrders}>
           Làm mới
         </button>
       </div>
