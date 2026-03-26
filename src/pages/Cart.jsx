@@ -141,7 +141,7 @@ function Cart() {
               <div style={{ padding: "12px 0" }}>Đang tải...</div>
             ) : error ? (
               <div style={{ padding: "12px 0" }}>{error}</div>
-            ) : (
+            ) : (console.log(cartItems),
               cartItems.map((item) => (
                 <ItemsCart
                   key={item.id}

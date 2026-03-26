@@ -9,6 +9,7 @@ function ItemsCart({ item, onIncrease, onDecrease, onRemove }) {
 
 			<div className="cart-item-info">
 				<h3>{item?.name || "Tên sản phẩm"}</h3>
+				<p className="cart-item-size">Size {item?.size || "Kích thước"}</p>
 				<p className="cart-item-price">{item?.price || "0 ₫"}</p>
 			</div>
 
