@@ -1,13 +1,19 @@
+import { useNavigate } from "react-router-dom";
+
 function ItemsCart({ item, onIncrease, onDecrease, onRemove }) {
+	const navigate = useNavigate();
+	const handleClickCard = () => {
+		navigate(`/product/${item?.productId}`);
+	}
 	const imageSrc = item?.image || "https://via.placeholder.com/110x110?text=Shoes";
 
 	return (
 		<article className="cart-item">
-			<div className="cart-item-image-wrap">
+			<div className="cart-item-image-wrap"  onClick={handleClickCard} style={{cursor: "pointer"}}>
 				<img src={imageSrc} alt={item?.name || "Product"} className="cart-item-image" />
 			</div>
 
-			<div className="cart-item-info">
+			<div className="cart-item-info"  onClick={handleClickCard} style={{cursor: "pointer"}}>
 				<h3>{item?.name || "Tên sản phẩm"}</h3>
 				<p className="cart-item-size">Size {item?.size || "Kích thước"}</p>
 				<p className="cart-item-price">{item?.price || "0 ₫"}</p>
