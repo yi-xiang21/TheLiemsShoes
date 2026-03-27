@@ -11,6 +11,9 @@ function Checkout() {
   const { token } = useAuth();
 
   const [cartItems, setCartItems] = useState(location.state?.cartItems || []);
+  const [paymentMethod, setPaymentMethod] = useState("cod");
+  const [submitting, setSubmitting] = useState(false);
+  const [toast, setToast] = useState({ message: "", type: "success" });
 
   const formatCurrencyVND = (value) => {
     return new Intl.NumberFormat("vi-VN").format(value) + " ₫";
@@ -65,6 +68,15 @@ function Checkout() {
 
   const [errors, setErrors] = useState({});
 
+  useEffect(() => {
+    if (!toast.message) return;
+    const timer = setTimeout(() => {
+      setToast({ message: "", type: "success" });
+    }, 2800);
+
+    return () => clearTimeout(timer);
+  }, [toast]);
+
 
 
   // ✅ FIX VALIDATE
@@ -99,17 +111,92 @@ function Checkout() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!validate()) return;
 
-    alert("Order placed successfully 🎉");
-    console.log({ form, cartItems });
+    if (!token) {
+      setToast({ message: "Please login before checkout.", type: "error" });
+      navigate("/Login");
+      return;
+    }
+
+    if (!cartItems.length) {
+      setToast({ message: "No items in cart.", type: "error" });
+      return;
+    }
+
+    setSubmitting(true);
+
+    try {
+      if (paymentMethod === "momo") {
+        const response = await axios.post(
+          getApiUrl("/payment/momo/create"),
+          {
+            fullName: form.name,
+            phone: form.phone,
+            address: form.address,
+            email: form.email,
+          },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        const payUrl = response.data?.payUrl;
+        if (!payUrl) {
+          throw new Error("MoMo payment URL is missing.");
+        }
+
+        window.location.href = payUrl;
+        return;
+      }
+
+      await axios.post(
+        getApiUrl("/orders/create"),
+        {
+          paymentMethod: "cod",
+          fullName: form.name,
+          phone: form.phone,
+          address: form.address,
+          email: form.email,
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      setToast({ message: "Order placed successfully.", type: "success" });
+      setCartItems([]);
+      setTimeout(() => navigate("/"), 700);
+    } catch (error) {
+      const apiMessage = error?.response?.data?.message;
+      setToast({
+        message: apiMessage || "Checkout failed. Please try again.",
+        type: "error",
+      });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
     <div className="checkout-wrapper">
+      {toast.message ? (
+        <div
+          style={{
+            position: "fixed",
+            top: 20,
+            right: 20,
+            zIndex: 9999,
+            background: toast.type === "success" ? "#1f8b4c" : "#c0392b",
+            color: "#fff",
+            padding: "10px 14px",
+            borderRadius: 8,
+            fontSize: 14,
+          }}
+        >
+          {toast.message}
+        </div>
+      ) : null}
+
       {/* LEFT */}
       <div className="checkout-left">
         <h2>Recipient Information</h2>
@@ -158,12 +245,24 @@ function Checkout() {
           <div >
             <p>Payment Method</p>
             <label>
-              <input type="radio" name="payment" value="cod" />
+              <input
+                type="radio"
+                name="payment"
+                value="cod"
+                checked={paymentMethod === "cod"}
+                onChange={(e) => setPaymentMethod(e.target.value)}
+              />
               COD
             </label>
             <br />
             <label>
-              <input type="radio" name="payment" value="momo" />
+              <input
+                type="radio"
+                name="payment"
+                value="momo"
+                checked={paymentMethod === "momo"}
+                onChange={(e) => setPaymentMethod(e.target.value)}
+              />
               MoMo
             </label>
           </div>
@@ -173,7 +272,9 @@ function Checkout() {
               Back to Cart
             </button>
 
-            <button type="submit">Place Order</button>
+            <button type="submit" disabled={submitting}>
+              {submitting ? "Processing..." : "Place Order"}
+            </button>
           </div>
         </form>
       </div>

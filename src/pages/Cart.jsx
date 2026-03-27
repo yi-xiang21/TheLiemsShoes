@@ -1,17 +1,26 @@
 import "../assets/css/cart.css";
 import ItemsCart from "../components/shared/ItemsCart.jsx";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { getApiUrl } from "../config/config";
 import { useAuth } from "../context/useAuth";
 
 function Cart() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { token } = useAuth();
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [isFinalizingMomo, setIsFinalizingMomo] = useState(false);
+  const [toast, setToast] = useState({ message: "", type: "success" });
+
+  useEffect(() => {
+    if (!toast.message) return;
+    const timer = setTimeout(() => setToast({ message: "", type: "success" }), 3000);
+    return () => clearTimeout(timer);
+  }, [toast]);
 
   const formatCurrencyVND = (value) => {
     return new Intl.NumberFormat("vi-VN").format(value) + " ₫";
@@ -66,6 +75,59 @@ function Cart() {
   useEffect(() => {
     fetchCart();
   }, [token]);
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const requestId = searchParams.get("requestId");
+    const resultCode = searchParams.get("resultCode");
+
+    if (!requestId || resultCode === null) {
+      return;
+    }
+
+    const clearQuery = () => {
+      navigate("/Cart", { replace: true });
+    };
+
+    if (resultCode !== "0") {
+      setToast({ message: "Thanh toán thất bại. Giỏ hàng đã được giữ nguyên.", type: "error" });
+      clearQuery();
+      return;
+    }
+
+    if (!token) {
+      setToast({ message: "Vui lòng đăng nhập lại để xác nhận đơn hàng.", type: "error" });
+      clearQuery();
+      return;
+    }
+
+    const finalizeMomoOrder = async () => {
+      setIsFinalizingMomo(true);
+      try {
+        const momoPayload = Object.fromEntries(searchParams.entries());
+        await axios.post(
+          getApiUrl("/payment/momo/finalize"),
+          { requestId, momoPayload },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        setToast({ message: "Thanh toán thành công. Đơn hàng đã được tạo.", type: "success" });
+        clearQuery();
+        await fetchCart();
+        setTimeout(() => navigate("/"), 700);
+      } catch (err) {
+        setToast({
+          message: err?.response?.data?.message || "Xác nhận thanh toán thất bại. Giỏ hàng được giữ nguyên.",
+          type: "error",
+        });
+        clearQuery();
+      } finally {
+        setIsFinalizingMomo(false);
+      }
+    };
+
+    finalizeMomoOrder();
+  }, [location.search, token, navigate]);
 
   const totalPrice = cartItems.reduce((sum, item) => {
     return sum + (Number(item.priceNumber) || 0) * (Number(item.quantity) || 0);
@@ -128,6 +190,24 @@ function Cart() {
 
   return (
     <section className="cart-page">
+      {toast.message ? (
+        <div
+          style={{
+            position: "fixed",
+            top: 20,
+            right: 20,
+            zIndex: 9999,
+            background: toast.type === "success" ? "#1f8b4c" : "#c0392b",
+            color: "#fff",
+            padding: "10px 14px",
+            borderRadius: 8,
+            fontSize: 14,
+          }}
+        >
+          {toast.message}
+        </div>
+      ) : null}
+
       <div className="cart-container">
         <div className="cart-left">
           <h1>Giỏ hàng</h1>
@@ -139,6 +219,8 @@ function Cart() {
               </div>
             ) : loading ? (
               <div style={{ padding: "12px 0" }}>Đang tải...</div>
+            ) : isFinalizingMomo ? (
+              <div style={{ padding: "12px 0" }}>Đang xác nhận thanh toán MoMo...</div>
             ) : error ? (
               <div style={{ padding: "12px 0" }}>{error}</div>
             ) : (console.log(cartItems),
@@ -171,6 +253,7 @@ function Cart() {
             </div>
 
             <button type="button" className="checkout-btn" 
+            disabled={isFinalizingMomo}
             onClick={() => navigate("/Checkout", { state: { cartItems } })}
             >
               Thanh toán
