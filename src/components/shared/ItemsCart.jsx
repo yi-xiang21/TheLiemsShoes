@@ -13,8 +13,8 @@ function ItemsCart({ item, onIncrease, onDecrease, onRemove }) {
 				<img src={imageSrc} alt={item?.name || "Product"} className="cart-item-image" />
 			</div>
 
-			<div className="cart-item-info"  onClick={handleClickCard} style={{cursor: "pointer"}}>
-				<h3>{item?.name || "Tên sản phẩm"}</h3>
+			<div className="cart-item-info"  >
+				<h3 onClick={handleClickCard} style={{cursor: "pointer"}}>{item?.name || "Tên sản phẩm"}</h3>
 				<p className="cart-item-size">Size {item?.size || "Kích thước"}</p>
 				<p className="cart-item-price">{item?.price || "0 ₫"}</p>
 			</div>
