@@ -154,7 +154,7 @@ function OrderDetail() {
                   </div>
                   <div className="order-detail-item-text">
                     <h3>{item.product_name || "Product"}</h3>
-                    <p>Color / Size: Pink Pastel / {item.size_name || "-"}</p>
+                    <p>Size: {item.size_name || "-"}</p>
                     <p>Quantity: {item.quantity || 0}</p>
                   </div>
                 </div>
