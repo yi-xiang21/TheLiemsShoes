@@ -63,6 +63,10 @@
 
 .user-profile-footer {
   padding: 20px 24px 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .user-profile-logout,

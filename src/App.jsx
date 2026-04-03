@@ -23,6 +23,8 @@ import EditProducts from "./pages/admin/EditProducts.jsx"
 import Cart from "./pages/Cart.jsx"
 import Checkout from "./pages/Checkout";
 import Detail from "./pages/Detail.jsx"
+import MyOrders from "./pages/MyOrders.jsx";
+import OrderDetail from "./pages/OrderDetail.jsx";
 function App() {
   return (
     <AuthProvider>
@@ -32,6 +34,8 @@ function App() {
           <Route index element={<Home />} />
           <Route path="Login" element={<Login />} />
           <Route path="UserProfile" element={<UserProfile />} />
+          <Route path="my-orders" element={<MyOrders />} />
+          <Route path="my-orders/:id" element={<OrderDetail />} />
           <Route path="About" element={<About />} />
           <Route path="Cart" element={<Cart />} />
           <Route path="Checkout" element={<Checkout />} />
