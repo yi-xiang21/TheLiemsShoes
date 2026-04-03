@@ -24,7 +24,7 @@ function Shop() {
         console.log("Fetched categories:", response.data);
       } catch (error) {
         console.error("Error fetching categories:", error);
-        setError("Không thể tải dữ liệu cửa hàng. Vui lòng thử lại sau.");
+        setError("Unable to load shop data. Please try again later.");
       } finally {
         setLoading(false);
       }
@@ -41,7 +41,7 @@ function Shop() {
   };
 
   if (loading) {
-    return <UserLoadingOverlay show={loading} text="Đang tải dữ liệu cửa hàng..." />;
+    return <UserLoadingOverlay show={loading} text="Loading shop data..." />;
   }
 
   if (error) {

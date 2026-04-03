@@ -31,7 +31,7 @@ function CreateProducts() {
         setCategories(Array.isArray(categoriesResponse.data?.data) ? categoriesResponse.data.data : []);
         setProductTypes(Array.isArray(productTypesResponse.data?.data) ? productTypesResponse.data.data : []);
       } catch {
-        setError("Không tải được dữ liệu danh mục/loại sản phẩm, vui lòng thử lại");
+        setError("Unable to load category/product type data, please try again");
       }
     };
 
@@ -78,7 +78,7 @@ function CreateProducts() {
     setSuccess("");
 
     if (!formData.product_name.trim() || !formData.price || !formData.description.trim() || !formData.category_id) {
-      setError("Vui lòng nhập đầy đủ các trường bắt buộc");
+      setError("Please fill in all required fields");
       return;
     }
 
@@ -90,12 +90,12 @@ function CreateProducts() {
       .filter((item) => item.size_name);
 
     if (!normalizedSizeStocks.length) {
-      setError("Vui lòng thêm ít nhất 1 size hợp lệ");
+      setError("Please add at least one valid size");
       return;
     }
 
     if (normalizedSizeStocks.some((item) => !Number.isInteger(item.stock_quantity) || item.stock_quantity < 0)) {
-      setError("Số lượng tồn từng size phải là số nguyên không âm");
+      setError("Stock quantity for each size must be a non-negative integer");
       return;
     }
 
@@ -105,7 +105,7 @@ function CreateProducts() {
     );
 
     if (duplicateSizeName) {
-      setError("Size bị trùng, vui lòng kiểm tra lại");
+      setError("Duplicate size detected, please review your size list");
       return;
     }
 
@@ -134,12 +134,12 @@ function CreateProducts() {
 
       await axios.post(getApiUrl("/products"), body);
 
-      setSuccess("Thêm sản phẩm thành công");
+      setSuccess("Product created successfully");
       setTimeout(() => {
         navigate("/admin/products");
       }, 700);
     } catch (err) {
-      setError(err.response?.data?.message || "Thêm sản phẩm thất bại");
+      setError(err.response?.data?.message || "Failed to create product");
     } finally {
       setIsSubmitting(false);
     }
@@ -156,20 +156,20 @@ function CreateProducts() {
 
       <form className="create-account-form create-product-form" onSubmit={handleSubmit}>
         <div className="form-group">
-          <label htmlFor="product_name">Tên sản phẩm</label>
+          <label htmlFor="product_name">Product name</label>
           <input
             id="product_name"
             name="product_name"
             type="text"
             value={formData.product_name}
             onChange={handleChange}
-            placeholder="Nhập tên sản phẩm"
+            placeholder="Enter product name"
             required
           />
         </div>
 
         <div className="form-group">
-          <label htmlFor="price">Giá</label>
+          <label htmlFor="price">Price</label>
           <input
             id="price"
             name="price"
@@ -178,13 +178,13 @@ function CreateProducts() {
             step="0.01"
             value={formData.price}
             onChange={handleChange}
-            placeholder="Nhập giá"
+            placeholder="Enter price"
             required
           />
         </div>
 
         <div className="form-group">
-          <label htmlFor="category_id">Danh mục</label>
+          <label htmlFor="category_id">Category</label>
           <select
             id="category_id"
             name="category_id"
@@ -192,7 +192,7 @@ function CreateProducts() {
             onChange={handleChange}
             required
           >
-            <option value="">Chọn danh mục</option>
+            <option value="">Select category</option>
             {categories.map((category) => (
               <option key={category.id} value={category.id}>
                 {category.category_name}
@@ -202,14 +202,14 @@ function CreateProducts() {
         </div>
 
         <div className="form-group">
-          <label htmlFor="product_type_id">Loại sản phẩm (tùy chọn)</label>
+          <label htmlFor="product_type_id">Product type (optional)</label>
           <select
             id="product_type_id"
             name="product_type_id"
             value={formData.product_type_id}
             onChange={handleChange}
           >
-            <option value="">Chọn loại sản phẩm</option>
+            <option value="">Select product type</option>
             {productTypes.map((type) => (
               <option key={type.id} value={type.id}>
                 {type.type_name}
@@ -219,7 +219,7 @@ function CreateProducts() {
         </div>
 
         <div className="form-group form-group-full">
-          <label>Size và số lượng tồn</label>
+          <label>Sizes and stock quantities</label>
           {sizeStocks.map((item, index) => (
             <div
               key={`size-stock-${index}`}
@@ -229,7 +229,7 @@ function CreateProducts() {
                 type="text"
                 value={item.size_name}
                 onChange={(event) => handleSizeStockChange(index, "size_name", event.target.value)}
-                placeholder="VD: 39, 40, 41"
+                placeholder="e.g. 39, 40, 41"
               />
               <input
                 type="number"
@@ -237,7 +237,7 @@ function CreateProducts() {
                 step="1"
                 value={item.stock_quantity}
                 onChange={(event) => handleSizeStockChange(index, "stock_quantity", event.target.value)}
-                placeholder="Số lượng"
+                placeholder="Quantity"
               />
               <button
                 type="button"
@@ -245,7 +245,7 @@ function CreateProducts() {
                 onClick={() => removeSizeStockRow(index)}
                 disabled={isSubmitting}
               >
-                Xóa
+                Remove
               </button>
             </div>
           ))}
@@ -255,28 +255,28 @@ function CreateProducts() {
             onClick={addSizeStockRow}
             disabled={isSubmitting}
           >
-            + Thêm size
+            + Add size
           </button>
           <small className="admin-form-hint">
-            Tổng tồn kho: {sizeStocks.reduce((sum, item) => sum + Math.max(0, Number(item.stock_quantity) || 0), 0)}
+            Total stock: {sizeStocks.reduce((sum, item) => sum + Math.max(0, Number(item.stock_quantity) || 0), 0)}
           </small>
         </div>
 
         <div className="form-group form-group-full">
-          <label htmlFor="description">Mô tả</label>
+          <label htmlFor="description">Description</label>
           <textarea
             id="description"
             name="description"
             rows="4"
             value={formData.description}
             onChange={handleChange}
-            placeholder="Nhập mô tả sản phẩm"
+            placeholder="Enter product description"
             required
           />
         </div>
 
         <div className="form-group form-group-full">
-          <label htmlFor="images">Hình ảnh (tối đa 10 ảnh)</label>
+          <label htmlFor="images">Images (max 10 files)</label>
           <input
             id="images"
             name="images"
@@ -285,12 +285,12 @@ function CreateProducts() {
             multiple
             onChange={handleImageChange}
           />
-          <small className="admin-form-hint">Đã chọn: {images.length} ảnh</small>
+          <small className="admin-form-hint">Selected: {images.length} image(s)</small>
         </div>
 
         <div className="admin-form-actions form-group-full">
           <button type="submit" className="button" disabled={isSubmitting}>
-            {isSubmitting ? "Đang thêm..." : "Thêm sản phẩm"}
+            {isSubmitting ? "Creating..." : "Create product"}
           </button>
           <button
             type="button"
@@ -298,7 +298,7 @@ function CreateProducts() {
             onClick={() => navigate("/admin/products")}
             disabled={isSubmitting}
           >
-            Hủy
+            Cancel
           </button>
         </div>
       </form>

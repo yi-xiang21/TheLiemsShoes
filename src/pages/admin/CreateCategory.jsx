@@ -33,19 +33,19 @@ function CreateCategory() {
     const newErrors = {};
 
     if (!formData.category_name.trim()) {
-      newErrors.category_name = 'Tên danh mục là bắt buộc';
+      newErrors.category_name = 'Category name is required';
     }
 
     if (formData.category_name.trim().length < 2) {
-      newErrors.category_name = 'Tên danh mục phải có ít nhất 2 ký tự';
+      newErrors.category_name = 'Category name must have at least 2 characters';
     }
 
     if (formData.category_name.trim().length > 100) {
-      newErrors.category_name = 'Tên danh mục không được vượt quá 100 ký tự';
+      newErrors.category_name = 'Category name must not exceed 100 characters';
     }
 
     if (formData.description.trim().length > 500) {
-      newErrors.description = 'Mô tả không được vượt quá 500 ký tự';
+      newErrors.description = 'Description must not exceed 500 characters';
     }
 
     setErrors(newErrors);
@@ -69,7 +69,7 @@ function CreateCategory() {
       });
 
       if (response.data.status === 'success') {
-        setSuccessMessage('Danh mục đã được tạo thành công!');
+        setSuccessMessage('Category created successfully!');
         setTimeout(() => {
           navigate('/admin/categories');
         }, 1500);
@@ -77,7 +77,7 @@ function CreateCategory() {
     } catch (error) {
       console.error('Error creating category:', error);
       setErrors({
-        submit: error.response?.data?.message || 'Có lỗi xảy ra khi tạo danh mục'
+        submit: error.response?.data?.message || 'An error occurred while creating category'
       });
     } finally {
       setLoading(false);
@@ -91,9 +91,9 @@ function CreateCategory() {
   return (
     <div className="create-category-container">
       <div className="form-header">
-        <h1>Thêm Danh Mục Mới</h1>
+        <h1>Add New Category</h1>
         <button className="btn-back" onClick={handleCancel}>
-          ← Quay Lại
+          ← Back
         </button>
       </div>
 
@@ -112,14 +112,14 @@ function CreateCategory() {
           )}
 
           <div className="form-group required">
-            <label htmlFor="category_name">Tên Danh Mục</label>
+            <label htmlFor="category_name">Category Name</label>
             <input
               type="text"
               id="category_name"
               name="category_name"
               value={formData.category_name}
               onChange={handleInputChange}
-              placeholder="Nhập tên danh mục (vd: Giày Nam, Giày Nữ)"
+              placeholder="Enter category name (e.g. Men's Shoes, Women's Shoes)"
               disabled={loading}
               maxLength="100"
             />
@@ -127,18 +127,18 @@ function CreateCategory() {
               <div className="error-message">{errors.category_name}</div>
             )}
             <small style={{ color: '#999', fontSize: '12px', marginTop: '5px', display: 'block' }}>
-              {formData.category_name.length}/100 ký tự
+              {formData.category_name.length}/100 characters
             </small>
           </div>
 
           <div className="form-group">
-            <label htmlFor="description">Mô Tả</label>
+            <label htmlFor="description">Description</label>
             <textarea
               id="description"
               name="description"
               value={formData.description}
               onChange={handleInputChange}
-              placeholder="Nhập mô tả về danh mục (tùy chọn)"
+              placeholder="Enter category description (optional)"
               disabled={loading}
               maxLength="500"
             />
@@ -146,7 +146,7 @@ function CreateCategory() {
               <div className="error-message">{errors.description}</div>
             )}
             <small style={{ color: '#999', fontSize: '12px', marginTop: '5px', display: 'block' }}>
-              {formData.description.length}/500 ký tự
+              {formData.description.length}/500 characters
             </small>
           </div>
 
@@ -156,7 +156,7 @@ function CreateCategory() {
               className="btn-submit"
               disabled={loading}
             >
-              {loading ? 'Đang tạo...' : 'Tạo Danh Mục'}
+              {loading ? 'Creating...' : 'Create Category'}
             </button>
             <button
               type="button"
@@ -164,7 +164,7 @@ function CreateCategory() {
               onClick={handleCancel}
               disabled={loading}
             >
-              Hủy
+              Cancel
             </button>
           </div>
         </form>

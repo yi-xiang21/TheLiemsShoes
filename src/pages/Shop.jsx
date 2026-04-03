@@ -29,7 +29,7 @@ function Shop() {
         console.log(res.data.data);
       } catch (error) {
         console.error("Error fetching products:", error);
-        setError("Không thể tải dữ liệu sản phẩm. Vui lòng thử lại sau.");
+        setError("Unable to load product data. Please try again later.");
       } finally {
         setLoading(false);
       }
@@ -39,7 +39,7 @@ function Shop() {
   }, [categoryId, typeId]);
 
   if (loading) {
-    return <UserLoadingOverlay show={loading} text="Đang tải sản phẩm..." />;
+    return <UserLoadingOverlay show={loading} text="Loading products..." />;
   }
 
   if (error) {

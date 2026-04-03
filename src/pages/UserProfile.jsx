@@ -82,7 +82,7 @@ function UserProfile () {
 
                 <div className="user-profile-footer">
                     <a href="/my-orders" className="user-profile-action">
-                        Lịch sử mua hàng
+                        Order History
                     </a>
                     <a href="/Logout" className="user-profile-logout">Log Out</a>
                 </div>

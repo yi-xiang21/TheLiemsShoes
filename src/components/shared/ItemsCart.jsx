@@ -14,13 +14,13 @@ function ItemsCart({ item, onIncrease, onDecrease, onRemove }) {
 			</div>
 
 			<div className="cart-item-info"  >
-				<h3 onClick={handleClickCard} style={{cursor: "pointer"}}>{item?.name || "Tên sản phẩm"}</h3>
-				<p className="cart-item-size">Size {item?.size || "Kích thước"}</p>
+				<h3 onClick={handleClickCard} style={{cursor: "pointer"}}>{item?.name || "Product name"}</h3>
+				<p className="cart-item-size">Size {item?.size || "N/A"}</p>
 				<p className="cart-item-price">{item?.price || "0 ₫"}</p>
 			</div>
 
 			<div className="cart-item-qty">
-				<span>Số lượng</span>
+				<span>Quantity</span>
 				<div className="qty-controls">
 					<button type="button" className="qty-btn" onClick={onDecrease}>
 						-

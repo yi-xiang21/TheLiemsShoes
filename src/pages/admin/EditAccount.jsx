@@ -32,7 +32,7 @@ function EditAccount() {
         setSuccess("")
 
         if (!selectedUser?.id) {
-            setError("Không tìm thấy tài khoản cần sửa. Vui lòng quay lại trang danh sách.")
+            setError("Cannot find the account to edit. Please return to the account list.")
             return
         }
 
@@ -44,12 +44,12 @@ function EditAccount() {
                 role: formData.role,
                 phone_number: formData.phone_number,
             })
-            setSuccess("Cập nhật tài khoản thành công")
+            setSuccess("Account updated successfully")
             setTimeout(() => {
                 navigate("/admin/account")
             }, 500)
         } catch (err) {
-            setError(err.response?.data?.message || "Cập nhật tài khoản thất bại")
+            setError(err.response?.data?.message || "Failed to update account")
         } finally {
             setIsSubmitting(false)
         }
@@ -82,7 +82,7 @@ function EditAccount() {
                 </select>
             </div>
             <button type="submit" className="button" disabled={isSubmitting || !selectedUser?.id}>
-                {isSubmitting ? "Đang cập nhật..." : "Cập Nhật Tài Khoản"}
+                {isSubmitting ? "Updating..." : "Update Account"}
             </button>
         </form>
     </div>

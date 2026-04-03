@@ -1,4 +1,5 @@
-import React from 'react';import '../../assets/css/detail.css'; // Mượn css của detail.css hoặc có thể tạo css riêng
+import React from 'react';
+import '../../assets/css/detail.css'; // Reuse styles from detail.css.
 
 const CardSize = ({id, size, isSelected, onClick }) => {
   return (

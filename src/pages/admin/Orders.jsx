@@ -19,7 +19,7 @@ function Orders() {
       setOrders(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error("Error fetching orders:", err);
-      setError(err.response?.data?.message || "Không thể tải danh sách đơn hàng");
+      setError(err.response?.data?.message || "Unable to load order list");
     } finally {
       setLoading(false);
     }
@@ -30,11 +30,11 @@ function Orders() {
   }, []);
 
   const columns = [
-    { field: "id", label: "Mã Đơn" },
-    { field: "user_name", label: "Khách Hàng" },
-    { field: "total_amount", label: "Tổng Tiền" },
-    { field: "status", label: "Trạng Thái" },
-    { field: "created_at", label: "Ngày Tạo" }
+    { field: "id", label: "Order ID" },
+    { field: "user_name", label: "Customer" },
+    { field: "total_amount", label: "Total" },
+    { field: "status", label: "Status" },
+    { field: "created_at", label: "Created At" }
   ];
 
   const formatDate = (dateString) => {
@@ -50,22 +50,22 @@ function Orders() {
   };
 
   const handleUpdateStatus = async (orderId) => {
-    const newStatus = window.prompt("Nhập trạng thái mới (pending, shipping, completed, cancelled):");
+    const newStatus = window.prompt("Enter new status (pending, shipping, completed, cancelled):");
     if (!newStatus) return;
 
     const validStatuses = ['pending', 'shipping', 'completed', 'cancelled'];
     if (!validStatuses.includes(newStatus.toLowerCase())) {
-      alert("Trạng thái không hợp lệ! Vui lòng nhập: pending, shipping, completed, hoặc cancelled.");
+      alert("Invalid status. Please enter: pending, shipping, completed, or cancelled.");
       return;
     }
 
     try {
       await axios.put(getApiUrl(`/orders/${orderId}/status`), { status: newStatus.toLowerCase() });
-      alert("Cập nhật trạng thái thành công!");
+      alert("Status updated successfully.");
       fetchOrders();
     } catch (err) {
       console.error("Update status error:", err);
-      alert("Lỗi cập nhật trạng thái: " + (err.response?.data?.message || err.message));
+      alert("Failed to update status: " + (err.response?.data?.message || err.message));
     }
   };
 
@@ -77,7 +77,7 @@ function Orders() {
       setOrderDetails(response.data);
     } catch (err) {
       console.error("Error loading order details:", err);
-      alert("Lỗi tải chi tiết đơn hàng");
+      alert("Failed to load order details");
     } finally {
       setDetailLoading(false);
     }
@@ -127,14 +127,14 @@ function Orders() {
   return (
     <section className="admin-card">
       <div className="admin-card-header">
-        <h2>Quản Lý Đơn Hàng</h2>
+        <h2>Order Management</h2>
         <button className="button button-action" style={{ marginLeft: "auto" }} onClick={fetchOrders}>
-          Làm mới
+          Refresh
         </button>
       </div>
 
       <div className="admin-card-body admin-table-wrap">
-        {loading && <p>Đang tải dữ liệu đơn hàng...</p>}
+        {loading && <p>Loading orders...</p>}
         {error && <p className="error-message">{error}</p>}
 
         {!loading && !error && (
@@ -144,14 +144,14 @@ function Orders() {
                 {columns.map((column) => (
                   <th key={column.field}>{column.label}</th>
                 ))}
-                <th>Hành Động</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               {orders.length === 0 ? (
                 <tr>
                   <td colSpan={columns.length + 1} style={{ textAlign: "center", padding: "20px" }}>
-                    Chưa có đơn hàng nào
+                    No orders found
                   </td>
                 </tr>
               ) : (
@@ -185,13 +185,13 @@ function Orders() {
                           onClick={() => handleViewOrder(order)}
                           style={{ marginRight: "5px" }}
                         >
-                          Xem
+                          View
                         </button>
                         <button
                           className="button button-action"
                           onClick={() => handleUpdateStatus(order.id)}
                         >
-                          Cập nhật
+                          Update
                         </button>
                       </div>
                     </td>
@@ -210,59 +210,59 @@ function Orders() {
             <button className="order-detail-modal-close" onClick={closeModal}>×</button>
 
             {detailLoading ? (
-              <div style={{ padding: "40px", textAlign: "center" }}>Đang tải...</div>
+              <div style={{ padding: "40px", textAlign: "center" }}>Loading...</div>
             ) : orderDetails ? (
               <div className="order-detail-modal-content">
                 {/* LEFT COLUMN */}
                 <div className="order-detail-left">
-                  <h2 style={{ marginBottom: "20px", fontSize: "18px", fontWeight: "600" }}>Chi Tiết Đơn Hàng</h2>
+                  <h2 style={{ marginBottom: "20px", fontSize: "18px", fontWeight: "600" }}>Order Details</h2>
 
                   {/* Order Info */}
                   <div style={{ marginBottom: "30px" }}>
-                    <h4 style={{ marginBottom: "15px", fontSize: "13px", fontWeight: "600", textTransform: "uppercase", color: "#666" }}>Thông Tin Đơn Hàng</h4>
+                    <h4 style={{ marginBottom: "15px", fontSize: "13px", fontWeight: "600", textTransform: "uppercase", color: "#666" }}>Order Information</h4>
                     <div style={{ display: "flex", justifyContent: "space-between", paddingBottom: "8px", borderBottom: "1px solid #eee", fontSize: "13px" }}>
-                      <span style={{ color: "#666" }}>Ngày Đặt:</span>
+                      <span style={{ color: "#666" }}>Placed At:</span>
                       <span style={{ fontWeight: "500" }}>{formatDate(orderDetails.order.created_at)}</span>
                     </div>
                     <div style={{ display: "flex", justifyContent: "space-between", paddingBottom: "8px", borderBottom: "1px solid #eee", fontSize: "13px", marginTop: "8px" }}>
-                      <span style={{ color: "#666" }}>Mã Đơn:</span>
+                      <span style={{ color: "#666" }}>Order Code:</span>
                       <span style={{ fontWeight: "500" }}>HN-{String(orderDetails.order.id).padStart(7, "0")}</span>
                     </div>
                     <div style={{ display: "flex", justifyContent: "space-between", paddingBottom: "8px", fontSize: "13px", marginTop: "8px" }}>
-                      <span style={{ color: "#666" }}>Tổng Tiền:</span>
+                      <span style={{ color: "#666" }}>Total:</span>
                       <span style={{ fontWeight: "600", color: "#8B0000", fontSize: "14px" }}>
                         {formatCurrency(orderDetails.order.total_amount)}
                       </span>
                     </div>
                       <div style={{ display: "flex", justifyContent: "space-between", paddingBottom: "8px", borderBottom: "1px solid #eee", fontSize: "13px", marginTop: "8px" }}>
                         <span style={{ color: "#666" }}>
-                          {isMomoOrder ? "Trạng thái thanh toán:" : "Phương thức thanh toán:"}
+                          {isMomoOrder ? "Payment status:" : "Payment method:"}
                         </span>
                         <span style={{ fontWeight: "500" }}>
-                          {isMomoOrder ? (isPaidMomo ? "Đã thanh toán" : "Chưa thanh toán") : "COD"}
+                          {isMomoOrder ? (isPaidMomo ? "Paid" : "Unpaid") : "COD"}
                         </span>
                       </div>
                   </div>
 
                   {/* Recipient Info */}
                   <div style={{ marginBottom: "30px" }}>
-                    <h4 style={{ marginBottom: "15px", fontSize: "13px", fontWeight: "600", textTransform: "uppercase", color: "#666" }}>Thông Tin Người Nhận</h4>
+                    <h4 style={{ marginBottom: "15px", fontSize: "13px", fontWeight: "600", textTransform: "uppercase", color: "#666" }}>Recipient Information</h4>
                     <div style={{ fontSize: "13px" }}>
                       <div style={{ marginBottom: "8px" }}>
-                        <span style={{ color: "#666" }}>Họ Tên:</span> <span style={{ marginLeft: "8px", fontWeight: "500" }}>{orderDetails.order.recipient_name || orderDetails.order.username || "-"}</span>
+                        <span style={{ color: "#666" }}>Full Name:</span> <span style={{ marginLeft: "8px", fontWeight: "500" }}>{orderDetails.order.recipient_name || orderDetails.order.username || "-"}</span>
                       </div>
                       <div style={{ marginBottom: "8px" }}>
-                        <span style={{ color: "#666" }}>SĐT:</span> <span style={{ marginLeft: "8px", fontWeight: "500" }}>{orderDetails.order.recipient_phone || "-"}</span>
+                        <span style={{ color: "#666" }}>Phone:</span> <span style={{ marginLeft: "8px", fontWeight: "500" }}>{orderDetails.order.recipient_phone || "-"}</span>
                       </div>
                       <div style={{ marginBottom: "8px" }}>
-                        <span style={{ color: "#666" }}>Địa Chỉ:</span> <span style={{ marginLeft: "8px", fontWeight: "500" }}>{orderDetails.order.recipient_address || "-"}</span>
+                        <span style={{ color: "#666" }}>Address:</span> <span style={{ marginLeft: "8px", fontWeight: "500" }}>{orderDetails.order.recipient_address || "-"}</span>
                       </div>
                     </div>
                   </div>
 
                   {/* Products */}
                   <div>
-                    <h4 style={{ marginBottom: "15px", fontSize: "13px", fontWeight: "600", textTransform: "uppercase", color: "#666" }}>Sản Phẩm</h4>
+                    <h4 style={{ marginBottom: "15px", fontSize: "13px", fontWeight: "600", textTransform: "uppercase", color: "#666" }}>Products</h4>
                     <div style={{ background: "#f9f9f9", borderRadius: "4px" }}>
                       {orderDetails.items && orderDetails.items.map((item, idx) => (
                         <div key={idx} style={{ display: "flex", gap: "12px", padding: "12px", borderBottom: idx < orderDetails.items.length - 1 ? "1px solid #eee" : "none" }}>
@@ -289,22 +289,22 @@ function Orders() {
                 <div className="order-detail-right">
                   {/* Shipping Info */}
                   <div style={{ marginBottom: "30px" }}>
-                    <h4 style={{ marginBottom: "15px", fontSize: "13px", fontWeight: "600", textTransform: "uppercase", color: "#666" }}>Thông Tin Vận Chuyển</h4>
+                    <h4 style={{ marginBottom: "15px", fontSize: "13px", fontWeight: "600", textTransform: "uppercase", color: "#666" }}>Shipping Information</h4>
                     <div style={{ fontSize: "13px" }}>
                       <div style={{ display: "flex", justifyContent: "space-between", paddingBottom: "8px", borderBottom: "1px solid #eee", marginBottom: "8px" }}>
-                        <span style={{ color: "#666" }}>Phương Thức:</span>
-                        <span style={{ fontWeight: "500" }}>Giao Hàng</span>
+                        <span style={{ color: "#666" }}>Method:</span>
+                        <span style={{ fontWeight: "500" }}>Delivery</span>
                       </div>
                       <div style={{ display: "flex", justifyContent: "space-between", paddingBottom: "8px", borderBottom: "1px solid #eee", marginBottom: "8px" }}>
-                        <span style={{ color: "#666" }}>Đơn Vị:</span>
+                        <span style={{ color: "#666" }}>Provider:</span>
                         <span style={{ fontWeight: "500" }}>GHT1K</span>
                       </div>
                       <div style={{ display: "flex", justifyContent: "space-between", paddingBottom: "8px", borderBottom: "1px solid #eee", marginBottom: "8px" }}>
-                        <span style={{ color: "#666" }}>Mã Vận Đơn:</span>
+                        <span style={{ color: "#666" }}>Tracking Code:</span>
                         <span style={{ fontWeight: "500" }}>12999AA1234567890</span>
                       </div>
                       <div style={{ display: "flex", justifyContent: "space-between" }}>
-                        <span style={{ color: "#666" }}>Dự Kiến:</span>
+                        <span style={{ color: "#666" }}>ETA:</span>
                         <span style={{ fontWeight: "500", color: "#4CAF50" }}>Nov 6, 2025</span>
                       </div>
                     </div>
@@ -312,30 +312,30 @@ function Orders() {
 
                   {/* Payment Info */}
                   <div style={{ marginBottom: "30px" }}>
-                    <h4 style={{ marginBottom: "15px", fontSize: "13px", fontWeight: "600", textTransform: "uppercase", color: "#666" }}>Chi Tiết Thanh Toán</h4>
+                    <h4 style={{ marginBottom: "15px", fontSize: "13px", fontWeight: "600", textTransform: "uppercase", color: "#666" }}>Payment Details</h4>
                     <div style={{ fontSize: "13px" }}>
                       <div style={{ display: "flex", justifyContent: "space-between", paddingBottom: "8px", borderBottom: "1px solid #eee", marginBottom: "8px" }}>
-                        <span style={{ color: "#666" }}>Tạm Tính:</span>
+                        <span style={{ color: "#666" }}>Subtotal:</span>
                             <span style={{ fontWeight: "500" }}>
                           {isPaidMomo ? formatCurrency(0) : formatCurrency(orderDetails.order.total_amount)}
                             </span>
                       </div>
                       <div style={{ display: "flex", justifyContent: "space-between", paddingBottom: "8px", borderBottom: "1px solid #eee", marginBottom: "8px" }}>
-                        <span style={{ color: "#666" }}>Vận Chuyển:</span>
-                        <span style={{ fontWeight: "500" }}>Miễn Phí</span>
+                        <span style={{ color: "#666" }}>Shipping:</span>
+                        <span style={{ fontWeight: "500" }}>Free</span>
                       </div>
                       <div style={{ display: "flex", justifyContent: "space-between", paddingBottom: "8px", borderBottom: "1px solid #eee", marginBottom: "8px" }}>
-                        <span style={{ color: "#666" }}>Thuế:</span>
+                        <span style={{ color: "#666" }}>Tax:</span>
                         <span style={{ fontWeight: "500" }}>0</span>
                       </div>
                       <div style={{ display: "flex", justifyContent: "space-between", paddingTop: "10px", borderTop: "2px solid #eee", marginBottom: "8px" }}>
-                        <span style={{ color: "#333", fontWeight: "600" }}>Tổng:</span>
+                        <span style={{ color: "#333", fontWeight: "600" }}>Total:</span>
                         <span style={{ fontWeight: "700", color: "#8B0000", fontSize: "16px" }}>
                           {formatCurrency(orderDetails.order.final_amount || orderDetails.order.total_amount)}
                         </span>
                       </div>
                       <div style={{ display: "flex", justifyContent: "space-between", paddingBottom: "8px", marginTop: "12px" }}>
-                        <span style={{ color: "#666" }}>Trạng Thái:</span>
+                        <span style={{ color: "#666" }}>Status:</span>
                         <span
                           style={{
                             padding: "4px 12px",
@@ -366,7 +366,7 @@ function Orders() {
                       fontSize: "13px",
                       gridColumn: "1 / -1"
                     }}>
-                      Gửi Email Khách
+                      Send Customer Email
                     </button>
                     <button style={{
                       padding: "10px",
@@ -378,7 +378,7 @@ function Orders() {
                       fontWeight: "500",
                       fontSize: "13px"
                     }}>
-                      In Đơn
+                      Print Order
                     </button>
                     <button style={{
                       padding: "10px",
@@ -390,13 +390,13 @@ function Orders() {
                       fontWeight: "500",
                       fontSize: "13px"
                     }}>
-                      Hoàn Tiền
+                      Refund
                     </button>
                   </div>
                 </div>
               </div>
             ) : (
-              <div style={{ padding: "40px", textAlign: "center", color: "#999" }}>Không thể tải chi tiết đơn hàng</div>
+              <div style={{ padding: "40px", textAlign: "center", color: "#999" }}>Unable to load order details</div>
             )}
           </div>
         </div>

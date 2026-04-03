@@ -2,7 +2,7 @@ import Lottie from "lottie-react";
 import loadingAnimation from "../../assets/animation/Sandy Loading.json";
 import "../../assets/css/user-loading-overlay.css";
 
-function UserLoadingOverlay({ show, text = "Đang tải dữ liệu..." }) {
+function UserLoadingOverlay({ show, text = "Loading data..." }) {
   if (!show) {
     return null;
   }

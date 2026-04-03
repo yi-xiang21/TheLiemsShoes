@@ -94,9 +94,9 @@ function Home() {
         setType(Array.isArray(typeResponse.data?.data) ? typeResponse.data.data : []);
         setProducts(Array.isArray(productsResponse.data?.data) ? productsResponse.data.data : []);
       } catch (fetchError) {
-        console.error("Không thể tải dữ liệu trang chủ:", fetchError);
+        console.error("Unable to load home data:", fetchError);
         setError(
-          "Không thể tải dữ liệu trang chủ (kiểm tra link https://be-theliemsshoes.onrender.com có hoạt động không)",
+          "Unable to load home data (check if https://be-theliemsshoes.onrender.com is available)",
         );
       } finally {
         setLoading(false);
@@ -149,7 +149,7 @@ function Home() {
   }, [loading]);
 
   if (loading) {
-    return <UserLoadingOverlay show={loading} text="Đang tải dữ liệu trang chủ..." />;
+    return <UserLoadingOverlay show={loading} text="Loading home data..." />;
   }
 
   if (error) {

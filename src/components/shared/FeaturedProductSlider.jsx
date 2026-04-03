@@ -47,7 +47,7 @@ function FeaturedProductSlider({ products }) {
   if (totalSlides === 0) {
     return (
       <div className="featuredProductSlider featuredProductSlider--empty">
-        <p>Không có sản phẩm để hiển thị.</p>
+        <p>No products available to display.</p>
       </div>
     );
   }

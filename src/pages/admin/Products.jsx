@@ -24,7 +24,7 @@ function Products() {
         setProducts(Array.isArray(productsResponse.data?.data) ? productsResponse.data.data : []);
         setProductTypes(Array.isArray(productTypesResponse.data?.data) ? productTypesResponse.data.data : []);
       } catch (err) {
-        setError(err.response?.data?.message || "Không thể tải danh sách sản phẩm");
+        setError(err.response?.data?.message || "Unable to load product list");
       } finally {
         setLoading(false);
       }
@@ -34,12 +34,12 @@ function Products() {
   }, []);
 
   const columns = [
-    { field: "id", label: "Mã SP" },
-    { field: "product_name", label: "Tên sản phẩm" },
-    { field: "price", label: "Giá" },
-    { field: "stock_quantity", label: "Tồn kho" },
-    { field: "category_name", label: "Danh mục" },
-    { field: "product_type_name", label: "Loại sản phẩm" }
+    { field: "id", label: "Product ID" },
+    { field: "product_name", label: "Product Name" },
+    { field: "price", label: "Price" },
+    { field: "stock_quantity", label: "Stock" },
+    { field: "category_name", label: "Category" },
+    { field: "product_type_name", label: "Product Type" }
   ];
 
   const productTypeMap = useMemo(() => {
@@ -54,7 +54,7 @@ function Products() {
   };
 
   const handleDeleteProduct = async (productId) => {
-    const confirmed = window.confirm("Bạn có chắc muốn xóa sản phẩm này không?");
+    const confirmed = window.confirm("Are you sure you want to delete this product?");
     if (!confirmed) {
       return;
     }
@@ -64,7 +64,7 @@ function Products() {
       await axios.delete(getApiUrl(`/products/${productId}`));
       setProducts((prevProducts) => prevProducts.filter((product) => product.id !== productId));
     } catch (err) {
-      setError(err.response?.data?.message || "Xóa sản phẩm thất bại");
+      setError(err.response?.data?.message || "Failed to delete product");
     } finally {
       setDeletingId(null);
     }
@@ -92,7 +92,7 @@ function Products() {
       </div>
 
       <div className="admin-card-body admin-table-wrap">
-        {loading && <p>Đang tải dữ liệu sản phẩm...</p>}
+        {loading && <p>Loading products...</p>}
         {error && <p>{error}</p>}
 
         {!loading && !error && (
@@ -108,7 +108,7 @@ function Products() {
             <tbody>
               {products.length === 0 ? (
                 <tr>
-                  <td colSpan={columns.length + 1}>Không có dữ liệu sản phẩm</td>
+                  <td colSpan={columns.length + 1}>No products found</td>
                 </tr>
               ) : (
                 products.map((product) => (
@@ -127,14 +127,14 @@ function Products() {
                           className="button button-action"
                           onClick={() => handleEditProduct(product)}
                         >
-                          Sửa
+                          Edit
                         </button>
                         <button
                           className="button button-action button-delete"
                           onClick={() => handleDeleteProduct(product.id)}
                           disabled={deletingId === product.id}
                         >
-                          {deletingId === product.id ? "Đang xóa..." : "Xóa"}
+                          {deletingId === product.id ? "Deleting..." : "Delete"}
                         </button>
                       </div>
                     </td>

@@ -16,7 +16,7 @@ function Account() {
         const res = await axios.get(getApiUrl("/users"))
         setUsers(res.data.data)
       } catch {
-        setError("Không thể tải được danh sách người dùng (kiểm tra link https://be-theliemsshoes.onrender.com có hoạt động không)")
+        setError("Unable to load user list (check if https://be-theliemsshoes.onrender.com is available)")
       } finally {
         setLoading(false)
       }
@@ -26,7 +26,7 @@ function Account() {
   }, [])
 
   const handleDelete = async (userId) => {
-    const confirmed = window.confirm("Bạn có chắc muốn xóa tài khoản này không?")
+    const confirmed = window.confirm("Are you sure you want to delete this account?")
     if (!confirmed) {
       return
     }
@@ -37,7 +37,7 @@ function Account() {
       await axios.delete(getApiUrl(`/users/${userId}`))
       setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userId))
     } catch (err) {
-      setError(err.response?.data?.message || "Xóa tài khoản thất bại")
+      setError(err.response?.data?.message || "Failed to delete account")
     } finally {
       setDeletingId(null)
     }
@@ -52,7 +52,7 @@ function Account() {
         </button>
       </div>
       <div className="admin-card-body">
-        {loading && <p>Đang tải dữ liệu... (Nếu 30s chưa có dữ liệu hãy vào https://be-theliemsshoes.onrender.com để api khởi động)</p>}
+        {loading && <p>Loading data... (If loading takes more than 30s, open https://be-theliemsshoes.onrender.com to wake the API)</p>}
         {error && <p>{error}</p>}
 
         <table className="admin-table">
@@ -69,7 +69,7 @@ function Account() {
           <tbody>
             {!loading && users.length === 0 && (
               <tr>
-                <td colSpan="6">Không có dữ liệu người dùng</td>
+                <td colSpan="6">No users found</td>
               </tr>
             )}
             {users.map((user) => (

@@ -27,21 +27,21 @@ function OrderDetail() {
 
   const orderStatusLabel = useMemo(() => {
     const rawStatus = String(orderData?.order?.status || "").toLowerCase();
-    if (rawStatus === "completed") return "Hoàn thành";
-    if (rawStatus === "shipping") return "Đang giao";
-    if (rawStatus === "cancelled") return "Đã hủy";
-    return "Chờ xử lý";
+    if (rawStatus === "completed") return "Completed";
+    if (rawStatus === "shipping") return "In delivery";
+    if (rawStatus === "cancelled") return "Cancelled";
+    return "Pending";
   }, [orderData?.order?.status]);
 
   const paymentStatusLabel = useMemo(() => {
     const paymentMethod = String(orderData?.order?.payment_method || "cod").toLowerCase();
     const paymentStatus = String(orderData?.order?.payment_status || "").toLowerCase();
 
-    if (paymentMethod !== "momo") return "Đã thanh toán";
+    if (paymentMethod !== "momo") return "Paid";
     if (["success", "paid", "completed"].includes(paymentStatus) || orderData?.order?.payment_trans_id) {
-      return "Đã thanh toán";
+      return "Paid";
     }
-    return "Chưa thanh toán";
+    return "Unpaid";
   }, [orderData?.order?.payment_method, orderData?.order?.payment_status, orderData?.order?.payment_trans_id]);
 
   const fetchOrderDetail = async () => {
@@ -59,7 +59,7 @@ function OrderDetail() {
       });
       setOrderData(response.data);
     } catch (err) {
-      setError(err?.response?.data?.message || "Không thể tải chi tiết đơn hàng.");
+      setError(err?.response?.data?.message || "Unable to load order details.");
     } finally {
       setLoading(false);
     }
@@ -78,9 +78,9 @@ function OrderDetail() {
     return (
       <section className="order-detail-page">
         <div className="order-detail-card state">
-          <h1>Chi Tiết Đơn Hàng</h1>
-          <p>Vui lòng đăng nhập để xem đơn hàng của bạn.</p>
-          <button type="button" className="order-detail-action" onClick={() => navigate("/Login")}>Đăng nhập</button>
+          <h1>Order Details</h1>
+          <p>Please log in to view your order.</p>
+          <button type="button" className="order-detail-action" onClick={() => navigate("/Login")}>Log In</button>
         </div>
       </section>
     );
@@ -89,7 +89,7 @@ function OrderDetail() {
   if (loading) {
     return (
       <section className="order-detail-page">
-        <div className="order-detail-card state">Đang tải chi tiết đơn hàng...</div>
+        <div className="order-detail-card state">Loading order details...</div>
       </section>
     );
   }
@@ -98,8 +98,8 @@ function OrderDetail() {
     return (
       <section className="order-detail-page">
         <div className="order-detail-card state">
-          <p>{error || "Không thể tải đơn hàng."}</p>
-          <button type="button" className="order-detail-action" onClick={() => navigate("/my-orders")}>Quay lại lịch sử mua hàng</button>
+          <p>{error || "Unable to load this order."}</p>
+          <button type="button" className="order-detail-action" onClick={() => navigate("/my-orders")}>Back to order history</button>
         </div>
       </section>
     );
@@ -111,33 +111,33 @@ function OrderDetail() {
   return (
     <section className="order-detail-page">
       <div className="order-detail-headline">
-        <h1>Chi Tiết Đơn Hàng</h1>
+        <h1>Order Details</h1>
         <button type="button" className="order-detail-link-back" onClick={() => navigate("/my-orders")}>
-          Quay lại lịch sử mua hàng
+          Back to order history
         </button>
       </div>
 
       <div className="order-status-strip">{orderStatusLabel}</div>
 
       <div className="order-detail-card">
-        <h2>Thông tin đơn hàng</h2>
-        <p><strong>Mã đơn hàng:</strong> HN-{String(order.id).padStart(7, "0")}</p>
-        <p><strong>Ngày đặt:</strong> {formatDateTime(order.created_at)}</p>
-        <p><strong>Trạng thái thanh toán:</strong> {paymentStatusLabel}</p>
-        <p><strong>Đơn vị vận chuyển:</strong> Xe đạp giao hàng (Free)</p>
+        <h2>Order information</h2>
+        <p><strong>Order code:</strong> HN-{String(order.id).padStart(7, "0")}</p>
+        <p><strong>Placed at:</strong> {formatDateTime(order.created_at)}</p>
+        <p><strong>Payment status:</strong> {paymentStatusLabel}</p>
+        <p><strong>Shipping provider:</strong> Bike delivery (Free)</p>
       </div>
 
       <div className="order-detail-card">
-        <h2>Thông tin giao hàng</h2>
-        <p><strong>Họ tên:</strong> {order.recipient_name || order.username || "-"}</p>
+        <h2>Shipping information</h2>
+        <p><strong>Full name:</strong> {order.recipient_name || order.username || "-"}</p>
         <p><strong>Email:</strong> {order.email || "-"}</p>
-        <p><strong>Số điện thoại:</strong> {order.recipient_phone || "-"}</p>
-        <p><strong>Địa chỉ:</strong> {order.recipient_address || "-"}</p>
-        <p><strong>Ghi chú:</strong> Không có</p>
+        <p><strong>Phone number:</strong> {order.recipient_phone || "-"}</p>
+        <p><strong>Address:</strong> {order.recipient_address || "-"}</p>
+        <p><strong>Note:</strong> None</p>
       </div>
 
       <div className="order-detail-card">
-        <h2>Sản phẩm đã đặt</h2>
+        <h2>Ordered items</h2>
         <div className="order-detail-item-list">
           {items.map((item) => {
             const lineTotal = (Number(item.price) || 0) * (Number(item.quantity) || 0);
@@ -147,15 +147,15 @@ function OrderDetail() {
                 <div className="order-detail-item-left">
                   <div className="order-detail-item-image-wrap">
                     {imageUrl ? (
-                      <img src={imageUrl} alt={item.product_name || "Sản phẩm"} className="order-detail-item-image" />
+                      <img src={imageUrl} alt={item.product_name || "Product"} className="order-detail-item-image" />
                     ) : (
                       <div className="order-detail-item-image-placeholder">No image</div>
                     )}
                   </div>
                   <div className="order-detail-item-text">
-                    <h3>{item.product_name || "Sản phẩm"}</h3>
-                    <p>Màu / Kích cỡ: Hồng Pastel / {item.size_name || "-"}</p>
-                    <p>Số lượng: {item.quantity || 0}</p>
+                    <h3>{item.product_name || "Product"}</h3>
+                    <p>Color / Size: Pink Pastel / {item.size_name || "-"}</p>
+                    <p>Quantity: {item.quantity || 0}</p>
                   </div>
                 </div>
                 <p className="order-detail-item-price">{formatCurrency(lineTotal)}</p>
@@ -164,7 +164,7 @@ function OrderDetail() {
           })}
         </div>
         <div className="order-detail-total-line">
-          <span>Tổng thanh toán</span>
+          <span>Total payment</span>
           <strong>{formatCurrency(totalAmount)}</strong>
         </div>
       </div>

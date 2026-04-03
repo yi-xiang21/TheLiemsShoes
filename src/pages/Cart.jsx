@@ -66,7 +66,7 @@ function Cart() {
       setCartItems(items.map(mapApiItemToUiItem));
     } catch (err) {
       console.error("Error fetching cart:", err);
-      setError(err?.response?.data?.message || "Không thể tải giỏ hàng.");
+      setError(err?.response?.data?.message || "Unable to load cart.");
     } finally {
       setLoading(false);
     }
@@ -90,13 +90,13 @@ function Cart() {
     };
 
     if (resultCode !== "0") {
-      setToast({ message: "Thanh toán thất bại. Giỏ hàng đã được giữ nguyên.", type: "error" });
+      setToast({ message: "Payment failed. Your cart was kept unchanged.", type: "error" });
       clearQuery();
       return;
     }
 
     if (!token) {
-      setToast({ message: "Vui lòng đăng nhập lại để xác nhận đơn hàng.", type: "error" });
+      setToast({ message: "Please sign in again to confirm your order.", type: "error" });
       clearQuery();
       return;
     }
@@ -111,13 +111,13 @@ function Cart() {
           { headers: { Authorization: `Bearer ${token}` } }
         );
 
-        setToast({ message: "Thanh toán thành công. Đơn hàng đã được tạo.", type: "success" });
+        setToast({ message: "Payment successful. Your order has been created.", type: "success" });
         clearQuery();
         await fetchCart();
         setTimeout(() => navigate("/"), 700);
       } catch (err) {
         setToast({
-          message: err?.response?.data?.message || "Xác nhận thanh toán thất bại. Giỏ hàng được giữ nguyên.",
+          message: err?.response?.data?.message || "Payment confirmation failed. Your cart was kept unchanged.",
           type: "error",
         });
         clearQuery();
@@ -149,7 +149,7 @@ function Cart() {
       );
     } catch (err) {
       console.error("Error updating cart item:", err);
-      alert(err?.response?.data?.message || "Không thể cập nhật số lượng.");
+      alert(err?.response?.data?.message || "Unable to update quantity.");
       fetchCart();
     }
   };
@@ -170,7 +170,7 @@ function Cart() {
       );
     } catch (err) {
       console.error("Error updating cart item:", err);
-      alert(err?.response?.data?.message || "Không thể cập nhật số lượng.");
+      alert(err?.response?.data?.message || "Unable to update quantity.");
       fetchCart();
     }
   };
@@ -183,7 +183,7 @@ function Cart() {
       setCartItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
     } catch (err) {
       console.error("Error removing cart item:", err);
-      alert(err?.response?.data?.message || "Không thể xóa sản phẩm.");
+      alert(err?.response?.data?.message || "Unable to remove item.");
       fetchCart();
     }
   };
@@ -210,20 +210,20 @@ function Cart() {
 
       <div className="cart-container">
         <div className="cart-left">
-          <h1>Giỏ hàng</h1>
+          <h1>Your Cart</h1>
           <div className="cart-list">
             {!token ? (
               <div style={{ padding: "12px 0" }}>
-                Vui lòng đăng nhập để xem giỏ hàng. {" "}
-                <button type="button" onClick={() => navigate("/Login")}>Đăng nhập</button>
+                Please sign in to view your cart. {" "}
+                <button type="button" onClick={() => navigate("/Login")}>Sign In</button>
               </div>
             ) : loading ? (
-              <div style={{ padding: "12px 0" }}>Đang tải...</div>
+              <div style={{ padding: "12px 0" }}>Loading...</div>
             ) : isFinalizingMomo ? (
-              <div style={{ padding: "12px 0" }}>Đang xác nhận thanh toán MoMo...</div>
+              <div style={{ padding: "12px 0" }}>Confirming MoMo payment...</div>
             ) : error ? (
               <div style={{ padding: "12px 0" }}>{error}</div>
-            ) : (console.log(cartItems),
+            ) : (
               cartItems.map((item) => (
                 <ItemsCart
                   key={item.id}
@@ -240,11 +240,11 @@ function Cart() {
         <aside className="cart-right">
           <div className="cart-summary-card">
             <label htmlFor="coupon" className="cart-label">
-              Mã coupon
+              Coupon code
             </label>
             <div className="coupon-row">
-              <input id="coupon" type="text" placeholder="Nhập mã giảm giá" />
-              <button type="button">Áp mã</button>
+              <input id="coupon" type="text" placeholder="Enter discount code" />
+              <button type="button">Apply</button>
             </div>
 
             <div className="total-row">
@@ -256,7 +256,7 @@ function Cart() {
             disabled={isFinalizingMomo}
             onClick={() => navigate("/Checkout", { state: { cartItems } })}
             >
-              Thanh toán
+              Checkout
             </button>
           </div>
         </aside>

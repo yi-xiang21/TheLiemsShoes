@@ -40,11 +40,11 @@ function MyOrders() {
   };
 
   const normalizePaymentStatus = (paymentMethod, paymentStatus) => {
-    if (paymentMethod !== "momo") return "Đã thanh toán";
+    if (paymentMethod !== "momo") return "Paid";
     if (["success", "paid", "completed"].includes(String(paymentStatus || "").toLowerCase())) {
-      return "Đã thanh toán";
+      return "Paid";
     }
-    return "Chờ thanh toán";
+    return "Pending payment";
   };
 
   const fetchMyOrders = async () => {
@@ -63,7 +63,7 @@ function MyOrders() {
       const list = Array.isArray(response.data?.data) ? response.data.data : [];
       setOrders(list);
     } catch (err) {
-      setError(err?.response?.data?.message || "Không thể tải lịch sử mua hàng.");
+      setError(err?.response?.data?.message || "Unable to load order history.");
     } finally {
       setLoading(false);
     }
@@ -79,7 +79,7 @@ function MyOrders() {
 
   const handleReorder = async (orderId) => {
     if (!token) {
-      setToast({ message: "Vui lòng đăng nhập để mua lại.", type: "error" });
+      setToast({ message: "Please log in to reorder.", type: "error" });
       return;
     }
 
@@ -91,7 +91,7 @@ function MyOrders() {
 
       const items = Array.isArray(detailResponse.data?.items) ? detailResponse.data.items : [];
       if (!items.length) {
-        setToast({ message: "Đơn hàng không có sản phẩm để mua lại.", type: "error" });
+        setToast({ message: "This order has no items to reorder.", type: "error" });
         return;
       }
 
@@ -122,16 +122,16 @@ function MyOrders() {
       if (successCount > 0) {
         setToast({
           message: failCount > 0
-            ? `Đã thêm ${successCount} sản phẩm, ${failCount} sản phẩm không thể thêm.`
-            : "Đã thêm sản phẩm vào giỏ hàng.",
+            ? `Added ${successCount} items, but ${failCount} items could not be added.`
+            : "Items added to cart.",
           type: failCount > 0 ? "error" : "success",
         });
         setTimeout(() => navigate("/Cart"), 500);
       } else {
-        setToast({ message: "Không thể thêm sản phẩm nào vào giỏ.", type: "error" });
+        setToast({ message: "No items could be added to cart.", type: "error" });
       }
     } catch (err) {
-      setToast({ message: err?.response?.data?.message || "Mua lại thất bại.", type: "error" });
+      setToast({ message: err?.response?.data?.message || "Reorder failed.", type: "error" });
     } finally {
       setReorderLoadingId(null);
     }
@@ -141,9 +141,9 @@ function MyOrders() {
     return (
       <section className="my-orders-page">
         <div className="my-orders-card my-orders-state">
-          <h1>Lịch sử mua hàng</h1>
-          <p>Vui lòng đăng nhập để xem đơn hàng của bạn.</p>
-          <button type="button" className="my-orders-btn secondary" onClick={() => navigate("/Login")}>Đăng nhập</button>
+          <h1>Order History</h1>
+          <p>Please log in to view your orders.</p>
+          <button type="button" className="my-orders-btn secondary" onClick={() => navigate("/Login")}>Log In</button>
         </div>
       </section>
     );
@@ -158,15 +158,15 @@ function MyOrders() {
       ) : null}
 
       <div className="my-orders-header">
-        <h1>Lịch Sử Mua Hàng</h1>
+        <h1>Order History</h1>
       </div>
 
       {loading ? (
-        <div className="my-orders-card my-orders-state">Đang tải đơn hàng...</div>
+        <div className="my-orders-card my-orders-state">Loading orders...</div>
       ) : error ? (
         <div className="my-orders-card my-orders-state">{error}</div>
       ) : orders.length === 0 ? (
-        <div className="my-orders-card my-orders-state">Bạn chưa có đơn hàng nào.</div>
+        <div className="my-orders-card my-orders-state">You do not have any orders yet.</div>
       ) : (
         <div className="my-orders-list">
           {orders.map((order) => {
@@ -185,19 +185,19 @@ function MyOrders() {
                   <div className="my-order-preview">
                     <div className="my-order-image-wrap">
                       {imageUrl ? (
-                        <img src={imageUrl} alt={order.product_name || "Sản phẩm"} className="my-order-image" />
+                        <img src={imageUrl} alt={order.product_name || "Product"} className="my-order-image" />
                       ) : (
                         <div className="my-order-image-placeholder">No image</div>
                       )}
                     </div>
 
                     <div className="my-order-text">
-                      <h3>{order.product_name || "Sản phẩm"}</h3>
+                      <h3>{order.product_name || "Product"}</h3>
                       <p>Size: {order.size_name || "-"}</p>
-                      <p>Số lượng: {order.quantity || 1}</p>
-                      <p>Giá: {formatCurrencyVND(order.item_total || totalAmount)}</p>
+                      <p>Quantity: {order.quantity || 1}</p>
+                      <p>Price: {formatCurrencyVND(order.item_total || totalAmount)}</p>
                       {(Number(order.total_items) || 1) > 1 ? (
-                        <p className="my-order-more">+ {(Number(order.total_items) || 1) - 1} sản phẩm khác</p>
+                        <p className="my-order-more">+ {(Number(order.total_items) || 1) - 1} more items</p>
                       ) : null}
                       <p className="my-order-payment-status">
                         {normalizePaymentStatus(order.payment_method, order.payment_status)}
@@ -207,7 +207,7 @@ function MyOrders() {
                 </div>
 
                 <div className="my-order-bottom">
-                  <p className="my-order-total">Tổng số tiền: {formatCurrencyVND(totalAmount)}</p>
+                  <p className="my-order-total">Order total: {formatCurrencyVND(totalAmount)}</p>
                   <div className="my-order-actions">
                     <button
                       type="button"
@@ -215,14 +215,14 @@ function MyOrders() {
                       disabled={!canReorder}
                       onClick={() => handleReorder(order.id)}
                     >
-                      {canReorder ? "Mua Lần Nữa" : "Đang xử lý..."}
+                      {canReorder ? "Buy Again" : "Processing..."}
                     </button>
                     <button
                       type="button"
                       className="my-orders-btn"
                       onClick={() => handleViewDetails(order.id)}
                     >
-                      Xem Chi Tiết Đơn Hàng
+                      View Order Details
                     </button>
                   </div>
                 </div>

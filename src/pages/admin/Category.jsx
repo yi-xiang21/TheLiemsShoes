@@ -36,14 +36,14 @@ function Category() {
 
   const handleDeleteCategory = async (categoryId) => {
     // TODO: Delete category with confirmation
-    if (window.confirm('Bạn có chắc chắn muốn xóa danh mục này?')) {
+    if (window.confirm('Are you sure you want to delete this category?')) {
       console.log('Delete category:', categoryId);
       try {
         await axios.delete(getApiUrl(`/categories/${categoryId}`));
         setCategories((prevCategories) => prevCategories.filter((category) => category.id !== categoryId));
       } catch (error) {
         console.error('Error deleting category:', error);
-        alert('Xóa danh mục thất bại');
+        alert('Failed to delete category');
       }
       fetchCategories();
     }
@@ -52,16 +52,16 @@ function Category() {
   return (
     <div className="category-container">
       <div className="category-header">
-        <h1>Quản lý Danh Mục</h1>
+        <h1>Category Management</h1>
         <button className="btn-add-category" onClick={handleAddCategory}>
-          + Thêm Danh Mục
+          + Add Category
         </button>
       </div>
 
       {loading ? (
         <div className="category-loading">
           <div className="spinner"></div>
-          <p>Đang tải dữ liệu...</p>
+          <p>Loading data...</p>
         </div>
       ) : categories.length > 0 ? (
         <div className="category-table-wrapper">
@@ -69,9 +69,9 @@ function Category() {
             <thead>
               <tr>
                 <th style={{ width: '10%' }}>ID</th>
-                <th style={{ width: '20%' }}>Tên Danh Mục</th>
-                <th style={{ width: '50%' }}>Mô Tả</th>
-                <th style={{ width: '20%' }}>Hành Động</th>
+                <th style={{ width: '20%' }}>Category Name</th>
+                <th style={{ width: '50%' }}>Description</th>
+                <th style={{ width: '20%' }}>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -85,13 +85,13 @@ function Category() {
                       className="btn-edit"
                       onClick={() => handleEditCategory(category)}
                     >
-                      Sửa
+                      Edit
                     </button>
                     <button
                       className="btn-delete"
                       onClick={() => handleDeleteCategory(category.id)}
                     >
-                      Xóa
+                      Delete
                     </button>
                   </td>
                 </tr>
@@ -101,9 +101,9 @@ function Category() {
         </div>
       ) : (
         <div className="no-categories">
-          <p>Chưa có danh mục nào. Hãy thêm danh mục mới.</p>
+          <p>No categories found. Add a new category to get started.</p>
           <button className="btn-add-category" onClick={handleAddCategory}>
-            + Thêm Danh Mục Ngay
+            + Add Category Now
           </button>
         </div>
       )}

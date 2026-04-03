@@ -14,7 +14,7 @@ function User() {
         <Outlet />
       </div>
       <Footer />
-      <UserLoadingOverlay show={loading} text="Đang đồng bộ tài khoản..." />
+      <UserLoadingOverlay show={loading} text="Syncing account..." />
     </>
   );
 }

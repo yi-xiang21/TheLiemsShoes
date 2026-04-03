@@ -73,7 +73,7 @@ function Login() {
       
        
 
-      setSuccess("Đăng nhập thành công")
+      setSuccess("Login successful")
       setLoginData({
         email: "",
         password: "",
@@ -85,9 +85,9 @@ function Login() {
       if (err.response?.data?.message) {
         setError(err.response.data.message)
       } else if (err.code === "ERR_NETWORK") {
-        setError("Không kết nối được API. Kiểm tra BE đang chạy và CORS.")
+        setError("Cannot connect to API. Check that the backend is running and CORS is configured.")
       } else {
-        setError("Đăng nhập thất bại")
+        setError("Login failed")
       }
     } finally {
       setIsSubmitting(false)
@@ -109,7 +109,7 @@ function Login() {
         phone_number: registerData.phone_number,
       })
 
-      setSuccess("Tạo tài khoản thành công")
+      setSuccess("Account created successfully")
       setRegisterData({
         username: "",
         email: "",
@@ -121,7 +121,7 @@ function Login() {
         switchMode("login")
       }, 700)
     } catch (err) {
-      setError(err.response?.data?.message || "Tạo tài khoản thất bại")
+      setError(err.response?.data?.message || "Account creation failed")
     } finally {
       setIsSubmitting(false)
     }
@@ -131,7 +131,7 @@ function Login() {
     <section className="auth-page auth-page-split">
       <UserLoadingOverlay
         show={isSubmitting}
-        text={mode === "login" ? "Đang đăng nhập..." : "Đang tạo tài khoản..."}
+        text={mode === "login" ? "Signing in..." : "Creating account..."}
       />
       <div className={`auth-shell ${mode === "register" ? "auth-shell--register" : ""}`}>
         <div className="auth-visual" aria-hidden="true">
@@ -139,7 +139,7 @@ function Login() {
         </div>
 
         <div className="auth-card">
-          <h1 className="auth-title">{mode === "login" ? "Đăng nhập" : "Tạo tài khoản"}</h1>
+          <h1 className="auth-title">{mode === "login" ? "Sign In" : "Create Account"}</h1>
           {error && <p className="auth-message auth-message-error">{error}</p>}
           {success && <p className="auth-message auth-message-success">{success}</p>}
 
@@ -151,20 +151,20 @@ function Login() {
                   type="email"
                   id="email"
                   name="email"
-                  placeholder="Nhập email của bạn"
+                  placeholder="Enter your email"
                   required
                   value={loginData.email}
                   onChange={handleLoginChange}
                 />
               </div>
               <div className="auth-field">
-                <label htmlFor="password">Mật khẩu</label>
+                <label htmlFor="password">Password</label>
                 <div className="auth-password-wrap">
                   <input
                     type={showLoginPassword ? "text" : "password"}
                     id="password"
                     name="password"
-                    placeholder="Nhập mật khẩu"
+                    placeholder="Enter your password"
                     required
                     value={loginData.password}
                     onChange={handleLoginChange}
@@ -173,27 +173,27 @@ function Login() {
                     type="button"
                     className="auth-password-toggle"
                     onClick={() => setShowLoginPassword((prev) => !prev)}
-                    aria-label={showLoginPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
+                    aria-label={showLoginPassword ? "Hide password" : "Show password"}
                   >
                     {showLoginPassword ? <FiEyeOff /> : <FiEye />}
                   </button>
                 </div>
               </div>
               <button type="submit" className="auth-btn auth-btn-primary" disabled={isSubmitting}>
-                {isSubmitting ? "Đang đăng nhập..." : "Đăng nhập"}
+                {isSubmitting ? "Signing in..." : "Sign In"}
               </button>
             </form>
           ) : (
             <form className="auth-form" onSubmit={handleRegisterSubmit}>
               <div className="auth-field">
-                <label htmlFor="username">Tên đăng nhập</label>
+                <label htmlFor="username">Username</label>
                 <input
                   type="text"
                   id="username"
                   name="username"
                   value={registerData.username}
                   onChange={handleRegisterChange}
-                  placeholder="Nhập tên đăng nhập"
+                  placeholder="Enter username"
                   required
                 />
               </div>
@@ -210,7 +210,7 @@ function Login() {
                 />
               </div>
               <div className="auth-field">
-                <label htmlFor="register-password">Mật khẩu</label>
+                <label htmlFor="register-password">Password</label>
                 <div className="auth-password-wrap">
                   <input
                     type={showRegisterPassword ? "text" : "password"}
@@ -218,33 +218,33 @@ function Login() {
                     name="password"
                     value={registerData.password}
                     onChange={handleRegisterChange}
-                    placeholder="Tạo mật khẩu"
+                    placeholder="Create a password"
                     required
                   />
                   <button
                     type="button"
                     className="auth-password-toggle"
                     onClick={() => setShowRegisterPassword((prev) => !prev)}
-                    aria-label={showRegisterPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
+                    aria-label={showRegisterPassword ? "Hide password" : "Show password"}
                   >
                     {showRegisterPassword ? <FiEyeOff /> : <FiEye />}
                   </button>
                 </div>
               </div>
               <div className="auth-field">
-                <label htmlFor="phone_number">Số điện thoại</label>
+                <label htmlFor="phone_number">Phone Number</label>
                 <input
                   type="text"
                   id="phone_number"
                   name="phone_number"
                   value={registerData.phone_number}
                   onChange={handleRegisterChange}
-                  placeholder="Nhập số điện thoại"
+                  placeholder="Enter phone number"
                   required
                 />
               </div>
               <button type="submit" className="auth-btn auth-btn-primary" disabled={isSubmitting}>
-                {isSubmitting ? "Đang tạo..." : "Tạo tài khoản"}
+                {isSubmitting ? "Creating..." : "Create Account"}
               </button>
             </form>
           )}
@@ -252,24 +252,24 @@ function Login() {
           <div className="auth-footer">
             {mode === "login" ? (
               <>
-                <span>Chưa có tài khoản?</span>
+                <span>Don't have an account?</span>
                 <button
                   type="button"
                   className="auth-btn auth-btn-outline"
                   onClick={() => switchMode("register")}
                 >
-                  Tạo tài khoản
+                  Create account
                 </button>
               </>
             ) : (
               <>
-                <span>Đã có tài khoản?</span>
+                <span>Already have an account?</span>
                 <button
                   type="button"
                   className="auth-btn auth-btn-outline"
                   onClick={() => switchMode("login")}
                 >
-                  Quay lại đăng nhập
+                  Back to sign in
                 </button>
               </>
             )}

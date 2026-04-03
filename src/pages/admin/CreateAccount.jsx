@@ -39,7 +39,7 @@ function CreateAccount() {
         phone_number: formData.phone_number,
       })
 
-      setSuccess("Tạo tài khoản thành công")
+      setSuccess("Account created successfully")
       setFormData({
         username: "",
         email: "",
@@ -51,7 +51,7 @@ function CreateAccount() {
         navigate("/admin/account")
       }, 500)
     } catch (err) {
-      setError(err.response?.data?.message || "Tạo tài khoản thất bại")
+      setError(err.response?.data?.message || "Failed to create account")
     } finally {
       setIsSubmitting(false)
     }
@@ -88,7 +88,7 @@ function CreateAccount() {
                 </select>
             </div>
             <button type="submit" className="button" disabled={isSubmitting}>
-              {isSubmitting ? "Đang tạo..." : "Create Account"}
+              {isSubmitting ? "Creating..." : "Create Account"}
             </button>
         </form>
     </div>

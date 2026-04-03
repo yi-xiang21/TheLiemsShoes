@@ -45,19 +45,19 @@ function EditCategory() {
     const newErrors = {};
 
     if (!formData.category_name.trim()) {
-      newErrors.category_name = 'Tên danh mục là bắt buộc';
+      newErrors.category_name = 'Category name is required';
     }
 
     if (formData.category_name.trim().length < 2) {
-      newErrors.category_name = 'Tên danh mục phải có ít nhất 2 ký tự';
+      newErrors.category_name = 'Category name must have at least 2 characters';
     }
 
     if (formData.category_name.trim().length > 100) {
-      newErrors.category_name = 'Tên danh mục không được vượt quá 100 ký tự';
+      newErrors.category_name = 'Category name must not exceed 100 characters';
     }
 
     if (formData.description.trim().length > 500) {
-      newErrors.description = 'Mô tả không được vượt quá 500 ký tự';
+      newErrors.description = 'Description must not exceed 500 characters';
     }
 
     setErrors(newErrors);
@@ -81,7 +81,7 @@ function EditCategory() {
       });
 
       if (response.data.status === 'success') {
-        setSuccessMessage('Danh mục đã được cập nhật thành công!');
+        setSuccessMessage('Category updated successfully!');
         setTimeout(() => {
           navigate('/admin/categories');
         }, 1500);
@@ -89,7 +89,7 @@ function EditCategory() {
     } catch (error) {
       console.error('Error updating category:', error);
       setErrors({
-        submit: error.response?.data?.message || 'Có lỗi xảy ra khi cập nhật danh mục'
+        submit: error.response?.data?.message || 'An error occurred while updating category'
       });
     } finally {
       setLoading(false);
@@ -104,9 +104,9 @@ function EditCategory() {
     return (
       <div className="create-category-container">
         <div className="no-categories" style={{ marginTop: '100px' }}>
-          <p>Không tìm thấy danh mục. Vui lòng quay lại danh sách.</p>
+          <p>Category not found. Please return to the category list.</p>
           <button className="btn-add-category" onClick={() => navigate('/admin/categories')}>
-            ← Quay Lại
+            ← Back
           </button>
         </div>
       </div>
@@ -116,9 +116,9 @@ function EditCategory() {
   return (
     <div className="create-category-container">
       <div className="form-header">
-        <h1>Chỉnh Sửa Danh Mục</h1>
+        <h1>Edit Category</h1>
         <button className="btn-back" onClick={handleCancel}>
-          ← Quay Lại
+          ← Back
         </button>
       </div>
 
@@ -137,14 +137,14 @@ function EditCategory() {
           )}
 
           <div className="form-group required">
-            <label htmlFor="category_name">Tên Danh Mục</label>
+            <label htmlFor="category_name">Category Name</label>
             <input
               type="text"
               id="category_name"
               name="category_name"
               value={formData.category_name}
               onChange={handleInputChange}
-              placeholder="Nhập tên danh mục"
+              placeholder="Enter category name"
               disabled={loading}
               maxLength="100"
             />
@@ -152,18 +152,18 @@ function EditCategory() {
               <div className="error-message">{errors.category_name}</div>
             )}
             <small style={{ color: '#999', fontSize: '12px', marginTop: '5px', display: 'block' }}>
-              {formData.category_name.length}/100 ký tự
+              {formData.category_name.length}/100 characters
             </small>
           </div>
 
           <div className="form-group">
-            <label htmlFor="description">Mô Tả</label>
+            <label htmlFor="description">Description</label>
             <textarea
               id="description"
               name="description"
               value={formData.description}
               onChange={handleInputChange}
-              placeholder="Nhập mô tả về danh mục (tùy chọn)"
+              placeholder="Enter category description (optional)"
               disabled={loading}
               maxLength="500"
             />
@@ -171,7 +171,7 @@ function EditCategory() {
               <div className="error-message">{errors.description}</div>
             )}
             <small style={{ color: '#999', fontSize: '12px', marginTop: '5px', display: 'block' }}>
-              {formData.description.length}/500 ký tự
+              {formData.description.length}/500 characters
             </small>
           </div>
 
@@ -181,7 +181,7 @@ function EditCategory() {
               className="btn-submit"
               disabled={loading}
             >
-              {loading ? 'Đang cập nhật...' : ' Lưu Thay Đổi'}
+              {loading ? 'Updating...' : 'Save Changes'}
             </button>
             <button
               type="button"
@@ -189,7 +189,7 @@ function EditCategory() {
               onClick={handleCancel}
               disabled={loading}
             >
-              Hủy
+              Cancel
             </button>
           </div>
         </form>
