@@ -9,6 +9,9 @@ function Orders() {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [orderDetails, setOrderDetails] = useState(null);
   const [detailLoading, setDetailLoading] = useState(false);
+  const [editingId, setEditingId] = useState(null);
+  const [editingStatus, setEditingStatus] = useState("");
+  const [savingStatus, setSavingStatus] = useState(false);
 
   const fetchOrders = async () => {
     try {
@@ -49,21 +52,55 @@ function Orders() {
     }).format(value);
   };
 
-  const handleUpdateStatus = async (orderId) => {
-    const newStatus = window.prompt("Enter new status (pending, shipping, completed, cancelled):");
-    if (!newStatus) return;
+  // Reusable style objects to avoid repeated inline styles
+  const styles = {
+    tableCell: { verticalAlign: 'middle' },
+    statusBadge: (status) => ({
+      display: 'inline-block',
+      padding: '6px 10px',
+      borderRadius: 20,
+      fontSize: '0.85em',
+      fontWeight: 600,
+      color: 'white',
+      backgroundColor: getStatusColor(status),
+      textTransform: 'capitalize',
+      minWidth: 90,
+      textAlign: 'center'
+    }),
+    select: { padding: '6px 8px', borderRadius: 4, minWidth: 120 },
+    actionGroup: { display: 'flex', gap: 8, alignItems: 'center' },
+    actionButton: { padding: '6px 10px' },
+    saveButton: { padding: '6px 10px', background: '#28a745', borderColor: '#28a745' },
+    cancelButton: { padding: '6px 10px', border: '1px solid #ddd' },
+    refreshButton: { marginLeft: 'auto' }
+  };
 
+  const handleUpdateStatus = (order) => {
+    setEditingId(order.id);
+    setEditingStatus(order.status || "pending");
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    setEditingStatus("");
+  };
+
+  const saveStatus = async (orderId) => {
     const validStatuses = ['pending', 'shipping', 'completed', 'cancelled'];
-    if (!validStatuses.includes(newStatus.toLowerCase())) {
-      alert("Invalid status. Please enter: pending, shipping, completed, or cancelled.");
+    if (!validStatuses.includes((editingStatus || '').toLowerCase())) {
+      alert("Invalid status. Choose: pending, shipping, completed, or cancelled.");
       return;
     }
 
     try {
-      await axios.put(getApiUrl(`/orders/${orderId}/status`), { status: newStatus.toLowerCase() });
-      alert("Status updated successfully.");
+      setSavingStatus(true);
+      await axios.put(getApiUrl(`/orders/${orderId}/status`), { status: editingStatus.toLowerCase() });
+      setSavingStatus(false);
+      setEditingId(null);
+      setEditingStatus("");
       fetchOrders();
     } catch (err) {
+      setSavingStatus(false);
       console.error("Update status error:", err);
       alert("Failed to update status: " + (err.response?.data?.message || err.message));
     }
@@ -128,7 +165,7 @@ function Orders() {
     <section className="admin-card">
       <div className="admin-card-header">
         <h2>Order Management</h2>
-        <button className="button button-action" style={{ marginLeft: "auto" }} onClick={fetchOrders}>
+        <button className="button button-add-product" onClick={fetchOrders}>
           Refresh
         </button>
       </div>
@@ -158,41 +195,68 @@ function Orders() {
                 orders.map((order) => (
                   <tr key={order.id}>
                     {columns.map((column) => (
-                      <td key={`${order.id}-${column.field}`}>
+                      <td key={`${order.id}-${column.field}`} style={styles.tableCell}>
                         {column.field === "status" ? (
-                          <span
-                            style={{
-                              padding: "4px 8px",
-                              borderRadius: "4px",
-                              fontSize: "0.85em",
-                              fontWeight: "bold",
-                              color: "white",
-                              backgroundColor: getStatusColor(order.status),
-                              textTransform: "capitalize"
-                            }}
-                          >
-                            {order.status}
-                          </span>
+                          editingId === order.id ? (
+                            <div style={styles.actionGroup}>
+                              <select
+                                value={editingStatus}
+                                onChange={(e) => setEditingStatus(e.target.value)}
+                                style={styles.select}
+                              >
+                                <option value="pending">Pending</option>
+                                <option value="shipping">Shipping</option>
+                                <option value="completed">Completed</option>
+                                <option value="cancelled">Cancelled</option>
+                              </select>
+                            </div>
+                          ) : (
+                            <span style={styles.statusBadge(order.status)}>{order.status}</span>
+                          )
                         ) : (
                           formatCellValue(column.field, order[column.field])
                         )}
                       </td>
                     ))}
-                    <td>
-                      <div className="admin-row-actions">
-                        <button
-                          className="button button-action"
-                          onClick={() => handleViewOrder(order)}
-                          style={{ marginRight: "5px" }}
-                        >
-                          View
-                        </button>
-                        <button
-                          className="button button-action"
-                          onClick={() => handleUpdateStatus(order.id)}
-                        >
-                          Update
-                        </button>
+                    <td style={styles.tableCell}>
+                      <div className="admin-row-actions" style={styles.actionGroup}>
+                        {editingId === order.id ? (
+                          <>
+                            <button
+                              className="button button-action"
+                              onClick={() => saveStatus(order.id)}
+                              disabled={savingStatus}
+                            >
+                              {savingStatus ? 'Saving...' : 'Save'}
+                            </button>
+                            <button
+                              className="button button-action button-delete"
+                              onClick={cancelEdit}
+                              disabled={savingStatus}
+                            >
+                              Cancel
+                            </button>
+                          </>
+                        ) : (
+                          <>
+                            <button
+                              className="button button-action"
+                              onClick={() => handleViewOrder(order)}
+                              style={styles.actionButton}
+                              disabled={editingId === order.id}
+                            >
+                              View
+                            </button>
+                            <button
+                              className="button button-action"
+                              onClick={() => handleUpdateStatus(order)}
+                              style={styles.actionButton}
+                              disabled={editingId !== null && editingId !== order.id}
+                            >
+                              Edit
+                            </button>
+                          </>
+                        )}
                       </div>
                     </td>
                   </tr>
