@@ -6,9 +6,8 @@
 
 .my-orders-header h1 {
   margin: 0 0 18px;
-  font-size: 40px;
+  font-size: 20px;
   font-weight: 500;
-  color: #7a214f;
 }
 
 .my-orders-list {
@@ -33,7 +32,7 @@
 }
 
 .my-order-code {
-  color: #7a214f;
+  color: rgb(0, 0, 0);
   font-weight: 700;
 }
 
@@ -79,14 +78,14 @@
 
 .my-order-text h3 {
   margin: 0;
-  font-size: 34px;
+  font-size: 25px;
   font-weight: 500;
   color: #1f2937;
 }
 
 .my-order-text p {
   margin: 6px 0 0;
-  font-size: 30px;
+  font-size: 20px;
   color: #111827;
 }
 
@@ -109,8 +108,8 @@
 
 .my-order-total {
   margin: 0;
-  font-size: 40px;
-  color: #7a214f;
+  font-size: 20px;
+  color: #000000;
 }
 
 .my-order-actions {
@@ -121,18 +120,18 @@
 .my-orders-btn {
   border: none;
   border-radius: 14px;
-  background: #812354;
+  background: #000000;
   color: #fff;
-  padding: 10px 22px;
-  font-size: 30px;
-  font-weight: 600;
+  padding: 8px 20px;
+  font-size: 18px;
+  font-weight: 200;
   cursor: pointer;
 }
-
-.my-orders-btn:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
+.my-orders-btn:hover {
+  background: #322fe1;
+  color: #000000;
 }
+
 
 .my-orders-btn.secondary {
   background: transparent;
