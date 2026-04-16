@@ -10,13 +10,32 @@ function Shop() {
   const categoryId = serachParams.get("categoryId");
   const typeId = serachParams.get("typeId");
 
-  const [products, setProducts] = useState([]);
+  // const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [productsList, setProductsList] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0);
+  const PRODUCTS_PER_PAGE = 12;
+
+  const handleNextPage = () => { 
+    const totalPages = Math.ceil(productsList.length / PRODUCTS_PER_PAGE);
+    if (currentPage < totalPages - 1) {
+      setCurrentPage(currentPage + 1);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }
+
+  const handlePreviousPage = () => {
+    if (currentPage > 0) {
+      setCurrentPage(currentPage - 1);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }
 
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
+      setCurrentPage(0);
       try {
         const endpoint = typeId
           ? getApiUrl(`/products/type/${typeId}`)
@@ -25,7 +44,7 @@ function Shop() {
             : getApiUrl("/products");
         const res = await axios.get(endpoint);
 
-        setProducts(res.data.data);
+        setProductsList(res.data.data);
         console.log(res.data.data);
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -46,6 +65,14 @@ function Shop() {
     return <div className="shop-container">{error}</div>;
   }
 
+  // Calculate pagination
+  const startIndex = currentPage * PRODUCTS_PER_PAGE;
+  const endIndex = startIndex + PRODUCTS_PER_PAGE;
+  const paginatedProducts = productsList.slice(startIndex, endIndex);
+  const totalPages = Math.ceil(productsList.length / PRODUCTS_PER_PAGE);
+  const isFirstPage = currentPage === 0;
+  const isLastPage = currentPage === totalPages - 1;  
+
   return (
     <section style={{ padding: "8px 4px 24px" }}>
       <h1 style={{ margin: "0 0 16px", fontSize: "28px" }}>Shop</h1>
@@ -56,8 +83,8 @@ function Shop() {
           gap: "16px",
         }}
       >
-        {products.length > 0 ? (
-          products.map((product) => {
+        {paginatedProducts.length > 0 ? (
+          paginatedProducts.map((product) => {
             const imagePath = product.images?.[0]?.image_url || "";
             const imageUrl = imagePath
               ? imagePath.startsWith("http")
@@ -83,6 +110,43 @@ function Shop() {
             No products found
           </div>
         )}
+      </div>
+      <div style={{ display: "flex", justifyContent: "center", gap: "16px", marginTop: "24px", alignItems: "center" }}>
+        <button 
+          onClick={handlePreviousPage} 
+          disabled={isFirstPage}
+          style={{
+            padding: "8px 16px",
+            cursor: isFirstPage ? "not-allowed" : "pointer",
+            opacity: isFirstPage ? 0.5 : 1,
+            backgroundColor: isFirstPage ? "#ccc" : "#333",
+            color: "white",
+            border: "none",
+            borderRadius: "4px",
+            fontSize: "14px"
+          }}
+        > 
+          Previous 
+        </button>
+        <span style={{ fontSize: "14px", color: "#666" }}>
+          Page {currentPage + 1} of {totalPages || 1} ({productsList.length} products)
+        </span>
+        <button 
+          onClick={handleNextPage} 
+          disabled={isLastPage}
+          style={{
+            padding: "8px 16px",
+            cursor: isLastPage ? "not-allowed" : "pointer",
+            opacity: isLastPage ? 0.5 : 1,
+            backgroundColor: isLastPage ? "#ccc" : "#333",
+            color: "white",
+            border: "none",
+            borderRadius: "4px",
+            fontSize: "14px"
+          }}
+        > 
+          Next 
+        </button>
       </div>
     </section>
   );
