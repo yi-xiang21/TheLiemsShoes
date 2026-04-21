@@ -211,6 +211,21 @@
   color: #b42318;
 }
 
+.category-page-error {
+  margin-bottom: 16px;
+}
+
+.form-error-block {
+  margin-bottom: 20px;
+}
+
+.field-counter {
+  color: #999;
+  font-size: 12px;
+  margin-top: 5px;
+  display: block;
+}
+
 .success-message {
   background: #ebf9f0;
   color: #067647;

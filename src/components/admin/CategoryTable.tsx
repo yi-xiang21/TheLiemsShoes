@@ -3,12 +3,11 @@ import type { CategoryType } from "../../pages/admin/Category"
 interface CategoryTableProps {
   categories: CategoryType[]
   loading: boolean
-  deletingId: number | null
   onEdit: (category: CategoryType) => void
   onDelete: (categoryId: number) => void
 }
 
-function CategoryTable({ categories, loading, deletingId, onEdit, onDelete }: CategoryTableProps) {
+function CategoryTable({ categories, loading, onEdit, onDelete }: CategoryTableProps) {
   return (
     <div className="category-table-wrapper">
       <table className="category-table">
@@ -38,9 +37,8 @@ function CategoryTable({ categories, loading, deletingId, onEdit, onDelete }: Ca
                 <button
                   className="btn-delete"
                   onClick={() => onDelete(category.id)}
-                  disabled={deletingId === category.id}
                 >
-                  {deletingId === category.id ? "Deleting..." : "Delete"}
+                  Delete
                 </button>
               </td>
             </tr>
