@@ -2,11 +2,24 @@ import "../../assets/css/header.css";
 import { NavLink, useNavigate } from "react-router-dom";
 import { FiSearch, FiShoppingCart, FiUser } from "react-icons/fi";
 import { useAuth } from "../../context/useAuth.js";
+import { useState } from "react";
 
 
 function Header() {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const [searchProduct, setSearchProduct] = useState("");
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    const result = searchProduct.trim();
+
+    if (!result) {
+      navigate("/Shop");
+      return;
+    }
+    navigate(`/Shop?search=${encodeURIComponent(result)}`);
+  }
 
   const handleAccountClick = () => {
     const token = localStorage.getItem("token");  
@@ -34,8 +47,9 @@ function Header() {
           <span className="brand-text">THELIEMSSHOES</span>
         </a>
 
-        <form className="header-search" role="search">
-          <input type="text" aria-label="Search" />
+        <form className="header-search" role="search" onSubmit={handleSearch}>
+          <input type="text" aria-label="Search" value={searchProduct} 
+          onChange={(e) => setSearchProduct(e.target.value)} />
           <button type="submit" aria-label="Search">
             <FiSearch className="header-icon" aria-hidden="true" />
           </button>

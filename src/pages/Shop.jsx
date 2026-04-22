@@ -6,9 +6,11 @@ import { getApiUrl } from "../config/config.js";
 import { useSearchParams } from "react-router-dom";
 
 function Shop() {
-  const [serachParams] = useSearchParams();
-  const categoryId = serachParams.get("categoryId");
-  const typeId = serachParams.get("typeId");
+  const [searchParams] = useSearchParams();
+  const categoryId = searchParams.get("categoryId");
+  const typeId = searchParams.get("typeId");
+  const searchTermRaw = searchParams.get("search") || "";
+  const searchTerm = searchTermRaw.trim().toLowerCase();
 
   // const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -17,8 +19,16 @@ function Shop() {
   const [currentPage, setCurrentPage] = useState(0);
   const PRODUCTS_PER_PAGE = 12;
 
+  const filteredProducts = !searchTerm
+    ? productsList
+    : productsList.filter((product) => {
+        const name = (product?.product_name || "").toLowerCase();
+        const category = (product?.category_name || "").toLowerCase();
+        return name.includes(searchTerm) || category.includes(searchTerm);
+      });
+
   const handleNextPage = () => { 
-    const totalPages = Math.ceil(productsList.length / PRODUCTS_PER_PAGE);
+    const totalPages = Math.ceil(filteredProducts.length / PRODUCTS_PER_PAGE);
     if (currentPage < totalPages - 1) {
       setCurrentPage(currentPage + 1);
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -31,6 +41,10 @@ function Shop() {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   }
+
+  useEffect(() => {
+    setCurrentPage(0);
+  }, [searchTerm]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -68,10 +82,10 @@ function Shop() {
   // Calculate pagination
   const startIndex = currentPage * PRODUCTS_PER_PAGE;
   const endIndex = startIndex + PRODUCTS_PER_PAGE;
-  const paginatedProducts = productsList.slice(startIndex, endIndex);
-  const totalPages = Math.ceil(productsList.length / PRODUCTS_PER_PAGE);
-  const isFirstPage = currentPage === 0;
-  const isLastPage = currentPage === totalPages - 1;  
+  const paginatedProducts = filteredProducts.slice(startIndex, endIndex);
+  const totalPages = Math.ceil(filteredProducts.length / PRODUCTS_PER_PAGE);
+  const isFirstPage = currentPage <= 0;
+  const isLastPage = totalPages <= 1 || currentPage >= totalPages - 1;
 
   return (
     <section style={{ padding: "8px 4px 24px" }}>
@@ -129,7 +143,7 @@ function Shop() {
           Previous 
         </button>
         <span style={{ fontSize: "14px", color: "#666" }}>
-          Page {currentPage + 1} of {totalPages || 1} ({productsList.length} products)
+          Page {totalPages ? currentPage + 1 : 0} of {totalPages || 1} ({filteredProducts.length} products)
         </span>
         <button 
           onClick={handleNextPage} 
