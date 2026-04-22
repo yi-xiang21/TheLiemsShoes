@@ -1,94 +1,30 @@
-import { useEffect, useState } from "react"
-import type { CategoryFormData, CategoryModalMode, CategoryType } from "../../pages/admin/Category"
-
-const EMPTY_FORM: CategoryFormData = {
-  category_name: "",
-  description: "",
-}
+import { useState } from "react"
+import type { CategoryFormData } from "../../pages/admin/Category"
 
 interface CategoryFormModalProps {
   isOpen: boolean
-  mode: CategoryModalMode
-  category: CategoryType | null
+  formData: CategoryFormData
   submitting: boolean
   error: string
+  onChange: React.Dispatch<React.SetStateAction<CategoryFormData>>
   onClose: () => void
-  onSubmit: (formData: CategoryFormData) => void
+  onSubmit: () => void
 }
 
-function CategoryFormModal({ isOpen, mode, category, submitting, error, onClose, onSubmit }: CategoryFormModalProps) {
-  const [formData, setFormData] = useState<CategoryFormData>(EMPTY_FORM)
-  const [formErrors, setFormErrors] = useState<Record<string, string>>({})
-
-  useEffect(() => {
-    if (!isOpen) {
-      return
-    }
-
-    if (mode === "edit" && category) {
-      setFormData({
-        category_name: category.category_name || "",
-        description: category.description || "",
-      })
-      setFormErrors({})
-      return
-    }
-
-    setFormData(EMPTY_FORM)
-    setFormErrors({})
-  }, [isOpen, mode, category])
+function CategoryFormModal({ isOpen, formData, submitting, error, onChange, onClose, onSubmit }: CategoryFormModalProps) {
 
   if (!isOpen) {
     return null
   }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }))
 
-    if (formErrors[name]) {
-      setFormErrors((prev) => ({
-        ...prev,
-        [name]: "",
-      }))
-    }
-  }
-
-  const validateForm = () => {
-    const newErrors: Record<string, string> = {}
-
-    if (!formData.category_name.trim()) {
-      newErrors.category_name = "Category name is required"
-    }
-
-    if (formData.category_name.trim().length < 2) {
-      newErrors.category_name = "Category name must have at least 2 characters"
-    }
-
-    if (formData.category_name.trim().length > 100) {
-      newErrors.category_name = "Category name must not exceed 100 characters"
-    }
-
-    if (formData.description.trim().length > 500) {
-      newErrors.description = "Description must not exceed 500 characters"
-    }
-
-    setFormErrors(newErrors)
-    return Object.keys(newErrors).length === 0
-  }
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (!validateForm()) {
-      return
-    }
-    onSubmit(formData)
+    onSubmit()
   }
 
-  const isEditMode = mode === "edit"
+  const isEditMode = Boolean(formData.id)
 
   return (
     <div className="admin-modal-overlay" onClick={onClose}>
@@ -102,7 +38,7 @@ function CategoryFormModal({ isOpen, mode, category, submitting, error, onClose,
 
         <div className="form-wrapper">
           <form onSubmit={handleSubmit}>
-            {error && <div className="error-message" style={{ marginBottom: "20px" }}>{error}</div>}
+            {error && <div className="error-message form-error-block">{error}</div>}
 
             <div className="form-group required">
               <label htmlFor="category_name">Category Name</label>
@@ -111,13 +47,12 @@ function CategoryFormModal({ isOpen, mode, category, submitting, error, onClose,
                 id="category_name"
                 name="category_name"
                 value={formData.category_name}
-                onChange={handleChange}
+                onChange={(e) => onChange({...formData, category_name: e.target.value})}
                 placeholder="Enter category name"
                 disabled={submitting}
                 maxLength={100}
               />
-              {formErrors.category_name && <div className="error-message">{formErrors.category_name}</div>}
-              <small style={{ color: "#999", fontSize: "12px", marginTop: "5px", display: "block" }}>
+              <small className="field-counter">
                 {formData.category_name.length}/100 characters
               </small>
             </div>
@@ -128,13 +63,12 @@ function CategoryFormModal({ isOpen, mode, category, submitting, error, onClose,
                 id="description"
                 name="description"
                 value={formData.description}
-                onChange={handleChange}
+                onChange={(e) => onChange({...formData, description: e.target.value})}
                 placeholder="Enter category description (optional)"
                 disabled={submitting}
                 maxLength={500}
               />
-              {formErrors.description && <div className="error-message">{formErrors.description}</div>}
-              <small style={{ color: "#999", fontSize: "12px", marginTop: "5px", display: "block" }}>
+              <small className="field-counter">
                 {formData.description.length}/500 characters
               </small>
             </div>

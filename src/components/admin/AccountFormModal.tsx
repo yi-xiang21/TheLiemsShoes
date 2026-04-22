@@ -1,63 +1,25 @@
-import { useEffect, useState } from "react"
-import type { AccountType, AccountFormData, AccountModalMode } from "../../pages/admin/Account"
-
-const EMPTY_FORM: AccountFormData = {
-  username: "",
-  email: "",
-  password: "",
-  phone_number: "",
-  role: "",
-}
+import type { AccountFormData } from "../../pages/admin/Account"
 
 interface AccountFormModalProps {
   isOpen: boolean
-  mode: AccountModalMode
-  user: AccountType | null
+  formData: AccountFormData
   submitting: boolean
+  onChange: React.Dispatch<React.SetStateAction<AccountFormData>>
   onClose: () => void
-  onSubmit: (formData: AccountFormData) => void
+  onSubmit: () => void
 }
 
-function AccountFormModal({ isOpen, mode, user, submitting, onClose, onSubmit }: AccountFormModalProps) {
-  const [formData, setFormData] = useState<AccountFormData>(EMPTY_FORM)
-
-  useEffect(() => {
-    if (!isOpen) {
-      return
-    }
-
-    if (mode === "edit" && user) {
-      setFormData({
-        username: user.username || "",
-        email: user.email || "",
-        password: "",
-        phone_number: user.phone_number || "",
-        role: user.role || "",
-      })
-      return
-    }
-
-    setFormData(EMPTY_FORM)
-  }, [isOpen, mode, user])
-
+function AccountFormModal({ isOpen, formData, submitting, onChange, onClose, onSubmit }: AccountFormModalProps) {
   if (!isOpen) {
     return null
   }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }))
-  }
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    onSubmit(formData)
+    onSubmit()
   }
 
-  const isEditMode = mode === "edit"
+  const isEditMode = Boolean(formData.id)
 
   return (
     <div className="admin-modal-overlay" onClick={onClose}>
@@ -72,18 +34,18 @@ function AccountFormModal({ isOpen, mode, user, submitting, onClose, onSubmit }:
         <form className="create-account-form" onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="username">Username</label>
-            <input type="text" id="username" name="username" value={formData.username} onChange={handleChange} required />
+            <input type="text" id="username" name="username" value={formData.username} onChange={(e)=> onChange({...formData,username: e.target.value})} required />
           </div>
 
           <div className="form-group">
             <label htmlFor="email">Email</label>
-            <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} required />
+            <input type="email" id="email" name="email" value={formData.email} onChange={(e)=> onChange({...formData,email: e.target.value})} required />
           </div>
 
           {!isEditMode && (
             <div className="form-group">
               <label htmlFor="password">Password</label>
-              <input type="password" id="password" name="password" value={formData.password} onChange={handleChange} required />
+              <input type="password" id="password" name="password" value={formData.password} onChange={(e)=> onChange({...formData,password: e.target.value})} required />
             </div>
           )}
 
@@ -94,14 +56,14 @@ function AccountFormModal({ isOpen, mode, user, submitting, onClose, onSubmit }:
               id="phone_number"
               name="phone_number"
               value={formData.phone_number}
-              onChange={handleChange}
+              onChange={(e)=> onChange({...formData,phone_number: e.target.value})}
               required
             />
           </div>
 
           <div className="form-group">
             <label htmlFor="role">Role</label>
-            <select id="role" name="role" value={formData.role} onChange={handleChange} required>
+            <select id="role" name="role" value={formData.role} onChange={(e)=> onChange({...formData,role: e.target.value})} required>
               <option value="">Select Role</option>
               <option value="admin">Admin</option>
               <option value="customer">Customer</option>

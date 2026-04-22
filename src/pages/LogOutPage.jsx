@@ -4,11 +4,7 @@ import { getApiUrl, API_CONFIG } from '../config/config';
 import { useAuth } from '../context/useAuth.js';
 
 const AUTH_STORAGE_KEYS = ['token', 'id', 'role'];
-
-function clearAuthStorage() {
-    AUTH_STORAGE_KEYS.forEach((key) => localStorage.removeItem(key));
-}
-
+    
 function LogOut() {
     const { token, logout } = useAuth();
     const hasLoggedOut = useRef(false);

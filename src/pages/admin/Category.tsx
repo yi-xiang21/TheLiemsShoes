@@ -12,20 +12,23 @@ export interface CategoryType {
 }
 
 export interface CategoryFormData {
+  id?: number | null
   category_name: string
   description: string
 }
 
-export type CategoryModalMode = "create" | "edit"
+const EMPTY_FORM: CategoryFormData = {
+  id: null,
+  category_name: "",
+  description: "",
+}
 
 function Category() {
   const [categories, setCategories] = useState<CategoryType[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
-  const [deletingId, setDeletingId] = useState<number | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [modalMode, setModalMode] = useState<CategoryModalMode>("create")
-  const [selectedCategory, setSelectedCategory] = useState<CategoryType | null>(null)
+  const [formData, setFormData] = useState<CategoryFormData>(EMPTY_FORM)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   useEffect(() => {
@@ -45,15 +48,17 @@ function Category() {
   }
 
   const openCreateModal = () => {
-    setModalMode("create")
-    setSelectedCategory(null)
+    setFormData(EMPTY_FORM)
     setIsModalOpen(true)
     setError("")
   }
 
   const openEditModal = (category: CategoryType) => {
-    setModalMode("edit")
-    setSelectedCategory(category)
+    setFormData({
+      id: category.id,
+      category_name: category.category_name || "",
+      description: category.description || "",
+    })
     setIsModalOpen(true)
     setError("")
   }
@@ -63,15 +68,15 @@ function Category() {
       return
     }
     setIsModalOpen(false)
-    setSelectedCategory(null)
+    setFormData(EMPTY_FORM)
   }
 
-  const handleUpsert = async (formData: CategoryFormData) => {
+  const handleUpsert = async () => {
     setError("")
     setIsSubmitting(true)
 
     try {
-      if (modalMode === "create") {
+      if (!formData.id) {
         const response = await axios.post(getApiUrl("/categories"), {
           category_name: formData.category_name.trim(),
           description: formData.description.trim() || null,
@@ -84,18 +89,14 @@ function Category() {
           await fetchCategories()
         }
       } else {
-        if (!selectedCategory?.id) {
-          throw new Error("Category not found")
-        }
-
-        await axios.put(getApiUrl(`/categories/${selectedCategory.id}`), {
+        await axios.put(getApiUrl(`/categories/${formData.id}`), {
           category_name: formData.category_name.trim(),
           description: formData.description.trim() || null,
         })
 
         setCategories((prev) =>
           prev.map((category) =>
-            category.id === selectedCategory.id
+            category.id === formData.id
               ? {
                   ...category,
                   category_name: formData.category_name.trim(),
@@ -106,7 +107,8 @@ function Category() {
         )
       }
 
-      closeModal()
+      setIsModalOpen(false)
+      setFormData(EMPTY_FORM)
     } catch (err: any) {
       setError(err.response?.data?.message || "Failed to save category")
     } finally {
@@ -120,14 +122,11 @@ function Category() {
     }
 
     setError("")
-    setDeletingId(categoryId)
     try {
       await axios.delete(getApiUrl(`/categories/${categoryId}`))
       setCategories((prevCategories) => prevCategories.filter((category) => category.id !== categoryId))
     } catch (err: any) {
       setError(err.response?.data?.message || "Failed to delete category")
-    } finally {
-      setDeletingId(null)
     }
   }
 
@@ -140,7 +139,7 @@ function Category() {
         </button>
       </div>
 
-      {error && <div className="error-message" style={{ marginBottom: "16px" }}>{error}</div>}
+      {error && <div className="error-message category-page-error">{error}</div>}
 
       {loading ? (
         <div className="category-loading">
@@ -151,7 +150,6 @@ function Category() {
         <CategoryTable
           categories={categories}
           loading={loading}
-          deletingId={deletingId}
           onEdit={openEditModal}
           onDelete={handleDeleteCategory}
         />
@@ -166,10 +164,10 @@ function Category() {
 
       <CategoryFormModal
         isOpen={isModalOpen}
-        mode={modalMode}
-        category={selectedCategory}
+        formData={formData}
         submitting={isSubmitting}
         error={error}
+        onChange={setFormData}
         onClose={closeModal}
         onSubmit={handleUpsert}
       />

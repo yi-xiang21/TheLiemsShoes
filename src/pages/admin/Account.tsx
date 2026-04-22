@@ -13,6 +13,7 @@ export interface AccountType {
 }
 
 export interface AccountFormData {
+  id?: number | null
   username: string
   email: string
   password: string
@@ -20,16 +21,21 @@ export interface AccountFormData {
   role: string
 }
 
-export type AccountModalMode = "create" | "edit"
+const EMPTY_FORM: AccountFormData = {
+  id: null,
+  username: "",
+  email: "",
+  password: "",
+  phone_number: "",
+  role: "",
+}
 
 function Account() {
   const [users, setUsers] = useState<AccountType[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
-  const [deletingId, setDeletingId] = useState<number | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [modalMode, setModalMode] = useState<AccountModalMode>("create")
-  const [selectedUser, setSelectedUser] = useState<AccountType | null>(null)
+  const [formData, setFormData] = useState<AccountFormData>(EMPTY_FORM)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   useEffect(() => {
@@ -48,15 +54,20 @@ function Account() {
   }, [])
 
   const openCreateModal = () => {
-    setModalMode("create")
-    setSelectedUser(null)
+    setFormData(EMPTY_FORM)
     setIsModalOpen(true)
     setError("")
   }
 
   const openEditModal = (user: AccountType) => {
-    setModalMode("edit")
-    setSelectedUser(user)
+    setFormData({
+      id: user.id,
+      username: user.username || "",
+      email: user.email || "",
+      password: "",
+      phone_number: user.phone_number || "",
+      role: user.role || "",
+    })
     setIsModalOpen(true)
     setError("")
   }
@@ -66,15 +77,15 @@ function Account() {
       return
     }
     setIsModalOpen(false)
-    setSelectedUser(null)
+    setFormData(EMPTY_FORM)
   }
 
-  const handleUpsert = async (formData: AccountFormData) => {
+  const handleUpsert = async () => {
     setError("")
     setIsSubmitting(true)
 
     try {
-      if (modalMode === "create") {
+      if (!formData.id) {
         const res = await axios.post(getApiUrl("/users"), {
           username: formData.username,
           email: formData.email,
@@ -91,11 +102,7 @@ function Account() {
           setUsers(reload.data.data || [])
         }
       } else {
-        if (!selectedUser?.id) {
-          throw new Error("Cannot find account id")
-        }
-
-        await axios.put(getApiUrl(`/users/${selectedUser.id}`), {
+        await axios.put(getApiUrl(`/users/${formData.id}`), {
           username: formData.username,
           email: formData.email,
           role: formData.role,
@@ -104,7 +111,7 @@ function Account() {
 
         setUsers((prevUsers) =>
           prevUsers.map((user) =>
-            user.id === selectedUser.id
+            user.id === formData.id
               ? {
                   ...user,
                   username: formData.username,
@@ -117,7 +124,8 @@ function Account() {
         )
       }
 
-      closeModal()
+      setIsModalOpen(false)
+      setFormData(EMPTY_FORM)
     } catch (err: any) {
       setError(err.response?.data?.message || "Failed to save account")
     } finally {
@@ -132,14 +140,11 @@ function Account() {
     }
 
     setError("")
-    setDeletingId(userId)
     try {
       await axios.delete(getApiUrl(`/users/${userId}`))
       setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userId))
     } catch (err: any) {
       setError(err.response?.data?.message || "Failed to delete account")
-    } finally {
-      setDeletingId(null)
     }
   }
 
@@ -155,14 +160,19 @@ function Account() {
         {loading && <p>Loading data... (If loading takes more than 30s, open https://be-theliemsshoes.onrender.com to wake the API)</p>}
         {error && <p>{error}</p>}
 
-        <AccountTable users={users} loading={loading} deletingId={deletingId} onEdit={openEditModal} onDelete={handleDelete} />
+        <AccountTable 
+        users={users} 
+        loading={loading} 
+        onEdit={openEditModal} 
+        onDelete={handleDelete} 
+        />
       </div>
 
       <AccountFormModal
         isOpen={isModalOpen}
-        mode={modalMode}
-        user={selectedUser}
+        formData={formData}
         submitting={isSubmitting}
+        onChange={setFormData}
         onClose={closeModal}
         onSubmit={handleUpsert}
       />

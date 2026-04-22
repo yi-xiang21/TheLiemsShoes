@@ -3,12 +3,11 @@ import type { AccountType } from "../../pages/admin/Account"
 interface AccountTableProps {
   users: AccountType[]
   loading: boolean
-  deletingId: number | null
   onEdit: (user: AccountType) => void
   onDelete: (userId: number) => void
 }
 
-function AccountTable({ users, loading, deletingId, onEdit, onDelete }: AccountTableProps) {
+function AccountTable({ users, loading, onEdit, onDelete }: AccountTableProps) {
   return (
     <table className="admin-table">
       <thead>
@@ -38,8 +37,8 @@ function AccountTable({ users, loading, deletingId, onEdit, onDelete }: AccountT
               <button className="button" onClick={() => onEdit(user)}>
                 Edit
               </button>
-              <button className="button" onClick={() => onDelete(user.id)} disabled={deletingId === user.id}>
-                {deletingId === user.id ? "Deleting..." : "Delete"}
+              <button className="button" onClick={() => onDelete(user.id)}>
+                Delete
               </button>
             </td>
           </tr>
